@@ -9,10 +9,73 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="kp" id="p-landing">
+<nav>
+  <div class="nav-inner ld-nav-inner">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
+      <div class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" fill="none" stroke="#F39C12" stroke-width="1.5"/>
+          <path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      Kin<span>Edu</span>
+    </a>
+  </div>
+</nav>
+
+<div class="ld-hero">
+  <div class="ld-c">
+    <div class="ld-eb">Ciência aplicada ao movimento</div>
+    <h1 class="ld-h1">Para onde você quer ir?</h1>
+    <p class="ld-lead">Somos uma plataforma educacional baseada em evidências científicas sobre exercício, treinamento e ciência do movimento. Escolha um caminho abaixo e comece agora.</p>
+
+    <div class="ld-grid">
+      <div class="ld-card" onclick="SP('category')" style="cursor:pointer">
+        <span class="ld-ic">📚</span>
+        <div class="ld-ct">Artigos &amp; Categorias</div>
+        <div class="ld-cd">200+ artigos organizados por área do conhecimento.</div>
+        <span class="ld-ar">→</span>
+      </div>
+      <div class="ld-card" onclick="SP('path')" style="cursor:pointer">
+        <span class="ld-ic">🧭</span>
+        <div class="ld-ct">Trilhas de Aprendizado</div>
+        <div class="ld-cd">Currículos guiados do básico ao avançado.</div>
+        <span class="ld-ar">→</span>
+      </div>
+      <div class="ld-card" onclick="SP('library')" style="cursor:pointer">
+        <span class="ld-ic">🔬</span>
+        <div class="ld-ct">Biblioteca Científica</div>
+        <div class="ld-cd">Estudos curados com grau de evidência.</div>
+        <span class="ld-ar">→</span>
+      </div>
+      <div class="ld-card" onclick="SP('glossary')" style="cursor:pointer">
+        <span class="ld-ic">📖</span>
+        <div class="ld-ct">Glossário</div>
+        <div class="ld-cd">240 termos técnicos explicados.</div>
+        <span class="ld-ar">→</span>
+      </div>
+      <div class="ld-card" onclick="SP('search')" style="cursor:pointer">
+        <span class="ld-ic">🔎</span>
+        <div class="ld-ct">Busca</div>
+        <div class="ld-cd">Encontre qualquer conteúdo do KinEdu.</div>
+        <span class="ld-ar">→</span>
+      </div>
+      <div class="ld-card" onclick="SP('profile')" style="cursor:pointer">
+        <span class="ld-ic">👤</span>
+        <div class="ld-ct">Meu Perfil</div>
+        <div class="ld-cd">Acompanhe seu progresso e histórico.</div>
+        <span class="ld-ar">→</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="kp" id="p-home">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
       <div class="logo-mark">
         <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" fill="none" stroke="#F39C12" stroke-width="1.5"/>
@@ -188,7 +251,7 @@
 <!-- ─── NAV ─── -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
       <div class="logo-mark">
         <svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
       </div>
@@ -196,7 +259,7 @@
     </a>
     <div class="nav-sep"></div>
     <nav class="nav-breadcrumb">
-      <a href="#home" onclick="SP('home');return false;">Início</a>
+      <a href="#landing" onclick="SP('landing');return false;">Início</a>
       <span>›</span>
       <a href="#category" onclick="SP('category');return false;">Fisiologia</a>
       <span>›</span>
@@ -636,7 +699,7 @@
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
     <ul class="nav-links">
       <li><a href="#category" onclick="SP('category');return false;">Artigos</a></li>
       <li><a href="#category" onclick="SP('category');return false;" class="active">Categorias</a></li>
@@ -656,7 +719,7 @@
   <div class="cat2-hero-grid"></div>
   <div class="cat2-hero-inner">
     <div class="cat2-breadcrumb">
-      <a href="#home" onclick="SP('home');return false;">Início</a>
+      <a href="#landing" onclick="SP('landing');return false;">Início</a>
       <span>›</span>
       <a href="#category" onclick="SP('category');return false;">Categorias</a>
       <span>›</span>
@@ -947,7 +1010,7 @@ function setLvl(el){
 <div class="kp" id="p-path">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
     <ul class="nav-links">
       <li><a href="#category" onclick="SP('category');return false;">Artigos</a></li>
       <li><a href="#category" onclick="SP('category');return false;">Categorias</a></li>
@@ -965,7 +1028,7 @@ function setLvl(el){
   <div class="path-hero-glow"></div>
   <div class="path-hero-inner">
     <div>
-      <div class="breadcrumb"><a href="#home" onclick="SP('home');return false;">Início</a><span>›</span><a href="#path" onclick="SP('path');return false;">Trilhas</a><span>›</span><span style="color:rgba(255,255,255,.65)">Fisiologia do Exercício</span></div>
+      <div class="breadcrumb"><a href="#landing" onclick="SP('landing');return false;">Início</a><span>›</span><a href="#path" onclick="SP('path');return false;">Trilhas</a><span>›</span><span style="color:rgba(255,255,255,.65)">Fisiologia do Exercício</span></div>
       <div class="path-type-badge"><span>⚡ Trilha de Aprendizado</span></div>
       <h1>Fisiologia do <em>Exercício</em> Aplicada</h1>
       <p class="path-hero-desc">Da célula ao sistema — compreenda como o corpo humano responde e se adapta ao exercício físico, com base nas evidências científicas mais atuais.</p>
@@ -1199,7 +1262,7 @@ function setLvl(el){
 <div class="kp" id="p-library">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
     <ul class="nav-links">
       <li><a href="#category" onclick="SP('category');return false;">Artigos</a></li>
       <li><a href="#category" onclick="SP('category');return false;">Categorias</a></li>
@@ -1395,7 +1458,7 @@ function setLvl(el){
 <div class="kp" id="p-glossary">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
     <ul class="nav-links">
       <li><a href="#category" onclick="SP('category');return false;">Artigos</a></li>
       <li><a href="#category" onclick="SP('category');return false;">Categorias</a></li>
@@ -1748,7 +1811,7 @@ function setLvl(el){
 <div class="kp" id="p-profile">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
     <ul class="nav-links">
       <li><a href="#category" onclick="SP('category');return false;">Artigos</a></li>
       <li><a href="#category" onclick="SP('category');return false;">Categorias</a></li>
@@ -1997,7 +2060,7 @@ function setLvl(el){
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
       <div class="logo-mark">
         <svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
       </div>
@@ -2468,13 +2531,13 @@ function setLvl(el){
 <div class="kp" id="p-art1">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
       <div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
       Kin<em>Edu</em>
     </a>
     <div class="nav-sep"></div>
     <nav class="nav-breadcrumb">
-      <a href="#home" onclick="SP('home');return false;">Início</a><span>›</span>
+      <a href="#landing" onclick="SP('landing');return false;">Início</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Hipertrofia</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Fisiologia</a><span>›</span>
       <strong>Os 3 Mecanismos da Hipertrofia Muscular…</strong>
@@ -2593,13 +2656,13 @@ function setLvl(el){
 <div class="kp" id="p-art2">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
       <div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
       Kin<em>Edu</em>
     </a>
     <div class="nav-sep"></div>
     <nav class="nav-breadcrumb">
-      <a href="#home" onclick="SP('home');return false;">Início</a><span>›</span>
+      <a href="#landing" onclick="SP('landing');return false;">Início</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Hipertrofia</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Programação</a><span>›</span>
       <strong>Volume de Treino e Hipertrofia…</strong>
@@ -2718,13 +2781,13 @@ function setLvl(el){
 <div class="kp" id="p-art3">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
       <div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
       Kin<em>Edu</em>
     </a>
     <div class="nav-sep"></div>
     <nav class="nav-breadcrumb">
-      <a href="#home" onclick="SP('home');return false;">Início</a><span>›</span>
+      <a href="#landing" onclick="SP('landing');return false;">Início</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Hipertrofia</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Biomecânica</a><span>›</span>
       <strong>Amplitude de Movimento e Hipertrofia…</strong>
@@ -2843,13 +2906,13 @@ function setLvl(el){
 <div class="kp" id="p-art4">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
       <div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
       Kin<em>Edu</em>
     </a>
     <div class="nav-sep"></div>
     <nav class="nav-breadcrumb">
-      <a href="#home" onclick="SP('home');return false;">Início</a><span>›</span>
+      <a href="#landing" onclick="SP('landing');return false;">Início</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Nutrição</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Hipertrofia</a><span>›</span>
       <strong>Proteína e Síntese Proteica Muscular…</strong>
@@ -2968,13 +3031,13 @@ function setLvl(el){
 <div class="kp" id="p-art5">
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home" onclick="SP('home');return false;">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
       <div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
       Kin<em>Edu</em>
     </a>
     <div class="nav-sep"></div>
     <nav class="nav-breadcrumb">
-      <a href="#home" onclick="SP('home');return false;">Início</a><span>›</span>
+      <a href="#landing" onclick="SP('landing');return false;">Início</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Hipertrofia</a><span>›</span>
       <a href="#category" onclick="SP('category');return false;">Programação</a><span>›</span>
       <strong>Frequência de Treino e Hipertrofia…</strong>

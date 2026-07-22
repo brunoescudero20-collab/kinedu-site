@@ -1,5 +1,5 @@
 function SP(k){
-  ['home','article','category','path','library','glossary','profile','search','art1','art2','art3','art4','art5'].forEach(function(p){
+  ['landing','home','article','category','path','library','glossary','profile','search','art1','art2','art3','art4','art5'].forEach(function(p){
     var e=document.getElementById('p-'+p); if(e) e.style.display='none';
   });
   var pg=document.getElementById('p-'+k);
@@ -11,7 +11,7 @@ function SP(k){
   if(k==='profile'){try{buildHeatmap();}catch(e){}}
 }
 window.addEventListener('popstate',function(e){if(e.state&&e.state.p)SP(e.state.p);});
-document.addEventListener('DOMContentLoaded',function(){SP((location.hash||'#home').replace('#',''));});
+document.addEventListener('DOMContentLoaded',function(){SP((location.hash||'#landing').replace('#',''));});
 
 // article
 // Reading progress
