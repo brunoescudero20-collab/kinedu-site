@@ -275,7 +275,7 @@ nav {
 .obj-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 6px; }
 
 /* ─── MAIN LAYOUT ─── */
-.article-layout { max-width: 1400px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: var(--col-main) 1fr; gap: 64px; align-items: start; padding-top: 56px; padding-bottom: 96px; }
+.article-layout { max-width: 1400px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: var(--col-aside) 1fr; gap: 48px; align-items: start; padding-top: 56px; padding-bottom: 96px; }
 
 /* ─── STICKY SIDEBAR ─── */
 .article-sidebar { position: sticky; top: 80px; display: flex; flex-direction: column; gap: 24px; }
@@ -314,6 +314,7 @@ nav {
 }
 
 /* Intro prose */
+.prose { max-width: var(--col-main); }
 .prose p { font-family: var(--font-read); font-size: 17px; line-height: 1.8; color: var(--text); margin-bottom: 20px; }
 .prose p:last-child { margin-bottom: 0; }
 .prose strong { font-weight: 700; color: var(--text); }
