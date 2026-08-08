@@ -97,14 +97,241 @@
       </div>
       Kin<span>Edu</span>
     </a>
+    <ul class="nav-links">
+      <li><a href="#category" onclick="SP('category');return false;">Artigos</a></li>
+      <li><a href="#category" onclick="SP('category');return false;">Categorias</a></li>
+      <li><a href="#path" onclick="SP('path');return false;">Trilhas</a></li>
+      <li><a href="#library" onclick="SP('library');return false;">Pesquisa</a></li>
+      <li><a href="#glossary" onclick="SP('glossary');return false;">Glossário</a></li>
+    </ul>
+    <div class="nav-actions"><button class="btn-primary-sm">Criar conta grátis</button></div>
   </div>
 </nav>
-<div class="ld-empty">
-  <span class="ld-empty-ic">🧮</span>
-  <h1 class="ld-empty-h1">Calculadora de Treino de Força</h1>
-  <p class="ld-empty-p">Estamos construindo esta ferramenta. Em breve você vai poder estimar cargas de treino aqui.</p>
-  <a class="ld-empty-back" href="#landing" onclick="SP('landing');return false;">← Voltar</a>
-</div>
+
+<header class="calc-hero">
+  <div class="calc-hero-inner">
+    <div class="calc-eb">Ferramenta gratuita · sem cadastro</div>
+    <h1>Calculadora 5/3/1</h1>
+    <p>Calcule seu Training Max, as cargas do ciclo e a progressão de cada levantamento com base no seu 1RM ou no seu melhor set.</p>
+  </div>
+</header>
+
+<main class="calc-layout">
+
+  <!-- CONFIG -->
+  <section class="calc-card" aria-label="Configurações gerais">
+    <div class="calc-card-title">Configurações</div>
+    <div class="calc-card-sub">Valem para os 4 levantamentos.</div>
+    <div class="calc-config-grid">
+      <div class="calc-field">
+        <span class="calc-field-label" id="calcUnitLabel">Unidade</span>
+        <div class="calc-toggle" role="group" aria-labelledby="calcUnitLabel">
+          <button type="button" class="calc-toggle-btn" data-unit-btn="kg" aria-pressed="true">kg</button>
+          <button type="button" class="calc-toggle-btn" data-unit-btn="lb" aria-pressed="false">lb</button>
+        </div>
+      </div>
+      <div class="calc-field">
+        <span class="calc-field-label" id="calcTmBaseLabel">Base do Training Max</span>
+        <div class="calc-toggle" role="group" aria-labelledby="calcTmBaseLabel">
+          <button type="button" class="calc-toggle-btn" data-tmbase-btn="0.85" aria-pressed="false">85%</button>
+          <button type="button" class="calc-toggle-btn" data-tmbase-btn="0.90" aria-pressed="true">90%</button>
+        </div>
+      </div>
+      <div class="calc-field">
+        <label class="calc-field-label" for="calcIncrement">Incremento de arredondamento</label>
+        <select class="calc-select" id="calcIncrement"></select>
+      </div>
+      <div class="calc-field">
+        <label class="calc-field-label" for="calcBarWeight">Peso da barra</label>
+        <input class="calc-input" type="number" id="calcBarWeight" min="0" step="0.5" value="20">
+      </div>
+      <div class="calc-field">
+        <span class="calc-field-label">Anilhas</span>
+        <label class="calc-checkbox-field"><input type="checkbox" id="calcShowPlates">Mostrar decomposição de anilhas</label>
+      </div>
+      <div class="calc-field">
+        <span class="calc-field-label">&nbsp;</span>
+        <button type="button" class="calc-clear-btn" id="calcClearData">Limpar dados salvos</button>
+      </div>
+    </div>
+    <p class="calc-hint">O Training Max é o número sobre o qual todas as porcentagens são calculadas. Ele é menor que sua força real de propósito.</p>
+  </section>
+
+  <!-- LIFTS -->
+  <section class="calc-lift-grid" aria-label="Levantamentos">
+
+    <article class="calc-card calc-lift" data-lift="squat" data-cinc-kg="5" data-cinc-lb="10">
+      <div class="calc-lift-head">
+        <span class="calc-lift-name">Agachamento</span>
+        <span class="calc-example-tag" data-example-tag hidden>Exemplo</span>
+      </div>
+      <div class="calc-toggle calc-mode-toggle" role="group" aria-label="Modo de entrada — Agachamento">
+        <button type="button" class="calc-toggle-btn" data-mode-btn="1rm" aria-pressed="false">Sei meu 1RM</button>
+        <button type="button" class="calc-toggle-btn" data-mode-btn="set" aria-pressed="true">Estimar pelo meu set</button>
+      </div>
+      <div class="calc-input-row single" data-mode-panel="1rm" hidden>
+        <div>
+          <label class="calc-field-label" for="calc-squat-1rm">1RM</label>
+          <input type="number" class="calc-input" id="calc-squat-1rm" min="0" step="0.5" placeholder="ex.: 140">
+          <div class="calc-field-err" data-err-for="calc-squat-1rm">Informe um peso maior que zero.</div>
+        </div>
+      </div>
+      <div class="calc-input-row" data-mode-panel="set">
+        <div>
+          <label class="calc-field-label" for="calc-squat-weight">Peso levantado</label>
+          <input type="number" class="calc-input" id="calc-squat-weight" min="0" step="0.5" placeholder="ex.: 120">
+          <div class="calc-field-err" data-err-for="calc-squat-weight">Informe um peso maior que zero.</div>
+        </div>
+        <div>
+          <label class="calc-field-label" for="calc-squat-reps">Repetições</label>
+          <input type="number" class="calc-input" id="calc-squat-reps" min="1" max="20" step="1" placeholder="ex.: 5">
+          <div class="calc-field-err" data-err-for="calc-squat-reps">Informe entre 1 e 12 repetições.</div>
+        </div>
+      </div>
+      <div class="calc-lift-results" data-results aria-live="polite"></div>
+    </article>
+
+    <article class="calc-card calc-lift" data-lift="bench" data-cinc-kg="2.5" data-cinc-lb="5">
+      <div class="calc-lift-head">
+        <span class="calc-lift-name">Supino</span>
+        <span class="calc-example-tag" data-example-tag hidden>Exemplo</span>
+      </div>
+      <div class="calc-toggle calc-mode-toggle" role="group" aria-label="Modo de entrada — Supino">
+        <button type="button" class="calc-toggle-btn" data-mode-btn="1rm" aria-pressed="false">Sei meu 1RM</button>
+        <button type="button" class="calc-toggle-btn" data-mode-btn="set" aria-pressed="true">Estimar pelo meu set</button>
+      </div>
+      <div class="calc-input-row single" data-mode-panel="1rm" hidden>
+        <div>
+          <label class="calc-field-label" for="calc-bench-1rm">1RM</label>
+          <input type="number" class="calc-input" id="calc-bench-1rm" min="0" step="0.5" placeholder="ex.: 100">
+          <div class="calc-field-err" data-err-for="calc-bench-1rm">Informe um peso maior que zero.</div>
+        </div>
+      </div>
+      <div class="calc-input-row" data-mode-panel="set">
+        <div>
+          <label class="calc-field-label" for="calc-bench-weight">Peso levantado</label>
+          <input type="number" class="calc-input" id="calc-bench-weight" min="0" step="0.5" placeholder="ex.: 85">
+          <div class="calc-field-err" data-err-for="calc-bench-weight">Informe um peso maior que zero.</div>
+        </div>
+        <div>
+          <label class="calc-field-label" for="calc-bench-reps">Repetições</label>
+          <input type="number" class="calc-input" id="calc-bench-reps" min="1" max="20" step="1" placeholder="ex.: 5">
+          <div class="calc-field-err" data-err-for="calc-bench-reps">Informe entre 1 e 12 repetições.</div>
+        </div>
+      </div>
+      <div class="calc-lift-results" data-results aria-live="polite"></div>
+    </article>
+
+    <article class="calc-card calc-lift" data-lift="deadlift" data-cinc-kg="5" data-cinc-lb="10">
+      <div class="calc-lift-head">
+        <span class="calc-lift-name">Levantamento Terra</span>
+        <span class="calc-example-tag" data-example-tag hidden>Exemplo</span>
+      </div>
+      <div class="calc-toggle calc-mode-toggle" role="group" aria-label="Modo de entrada — Levantamento Terra">
+        <button type="button" class="calc-toggle-btn" data-mode-btn="1rm" aria-pressed="false">Sei meu 1RM</button>
+        <button type="button" class="calc-toggle-btn" data-mode-btn="set" aria-pressed="true">Estimar pelo meu set</button>
+      </div>
+      <div class="calc-input-row single" data-mode-panel="1rm" hidden>
+        <div>
+          <label class="calc-field-label" for="calc-deadlift-1rm">1RM</label>
+          <input type="number" class="calc-input" id="calc-deadlift-1rm" min="0" step="0.5" placeholder="ex.: 180">
+          <div class="calc-field-err" data-err-for="calc-deadlift-1rm">Informe um peso maior que zero.</div>
+        </div>
+      </div>
+      <div class="calc-input-row" data-mode-panel="set">
+        <div>
+          <label class="calc-field-label" for="calc-deadlift-weight">Peso levantado</label>
+          <input type="number" class="calc-input" id="calc-deadlift-weight" min="0" step="0.5" placeholder="ex.: 160">
+          <div class="calc-field-err" data-err-for="calc-deadlift-weight">Informe um peso maior que zero.</div>
+        </div>
+        <div>
+          <label class="calc-field-label" for="calc-deadlift-reps">Repetições</label>
+          <input type="number" class="calc-input" id="calc-deadlift-reps" min="1" max="20" step="1" placeholder="ex.: 5">
+          <div class="calc-field-err" data-err-for="calc-deadlift-reps">Informe entre 1 e 12 repetições.</div>
+        </div>
+      </div>
+      <div class="calc-lift-results" data-results aria-live="polite"></div>
+    </article>
+
+    <article class="calc-card calc-lift" data-lift="press" data-cinc-kg="2.5" data-cinc-lb="5">
+      <div class="calc-lift-head">
+        <span class="calc-lift-name">Desenvolvimento Militar</span>
+        <span class="calc-example-tag" data-example-tag hidden>Exemplo</span>
+      </div>
+      <div class="calc-toggle calc-mode-toggle" role="group" aria-label="Modo de entrada — Desenvolvimento Militar">
+        <button type="button" class="calc-toggle-btn" data-mode-btn="1rm" aria-pressed="false">Sei meu 1RM</button>
+        <button type="button" class="calc-toggle-btn" data-mode-btn="set" aria-pressed="true">Estimar pelo meu set</button>
+      </div>
+      <div class="calc-input-row single" data-mode-panel="1rm" hidden>
+        <div>
+          <label class="calc-field-label" for="calc-press-1rm">1RM</label>
+          <input type="number" class="calc-input" id="calc-press-1rm" min="0" step="0.5" placeholder="ex.: 60">
+          <div class="calc-field-err" data-err-for="calc-press-1rm">Informe um peso maior que zero.</div>
+        </div>
+      </div>
+      <div class="calc-input-row" data-mode-panel="set">
+        <div>
+          <label class="calc-field-label" for="calc-press-weight">Peso levantado</label>
+          <input type="number" class="calc-input" id="calc-press-weight" min="0" step="0.5" placeholder="ex.: 50">
+          <div class="calc-field-err" data-err-for="calc-press-weight">Informe um peso maior que zero.</div>
+        </div>
+        <div>
+          <label class="calc-field-label" for="calc-press-reps">Repetições</label>
+          <input type="number" class="calc-input" id="calc-press-reps" min="1" max="20" step="1" placeholder="ex.: 5">
+          <div class="calc-field-err" data-err-for="calc-press-reps">Informe entre 1 e 12 repetições.</div>
+        </div>
+      </div>
+      <div class="calc-lift-results" data-results aria-live="polite"></div>
+    </article>
+
+  </section>
+
+  <!-- REVERSE AMRAP -->
+  <section class="calc-card" aria-label="Calculadora de AMRAP reverso">
+    <div class="calc-card-title">Calculadora de AMRAP reverso</div>
+    <div class="calc-card-sub">Fez a série AMRAP? Informe o resultado e veja o que ele indica sobre seu Training Max.</div>
+    <div class="calc-reverse-grid">
+      <div>
+        <label class="calc-field-label" for="calcRevWeek">Semana</label>
+        <select class="calc-select" id="calcRevWeek">
+          <option value="1">Semana 1 (mín. 5 reps)</option>
+          <option value="2">Semana 2 (mín. 3 reps)</option>
+          <option value="3">Semana 3 (mín. 1 rep)</option>
+        </select>
+      </div>
+      <div>
+        <label class="calc-field-label" for="calcRevWeight">Peso da série AMRAP</label>
+        <input type="number" class="calc-input" id="calcRevWeight" min="0" step="0.5" placeholder="ex.: 106">
+      </div>
+      <div>
+        <label class="calc-field-label" for="calcRevReps">Repetições feitas</label>
+        <input type="number" class="calc-input" id="calcRevReps" min="1" max="30" step="1" placeholder="ex.: 8">
+      </div>
+    </div>
+    <div class="calc-reverse-result" id="calcRevResult" aria-live="polite">Preencha os campos acima para ver a leitura do seu AMRAP.</div>
+  </section>
+
+  <!-- PROJECTION -->
+  <section class="calc-card" aria-label="Projeção dos próximos ciclos">
+    <div class="calc-card-title">Projeção dos próximos ciclos</div>
+    <div class="calc-card-sub">Como o Training Max e a carga mais pesada evoluem nos ciclos 1 a 4, para cada levantamento preenchido.</div>
+    <div class="calc-table-wrap">
+      <table class="calc-proj-table" id="calcProjTable">
+        <caption class="sr-only">Projeção do Training Max e da carga mais pesada por ciclo</caption>
+      </table>
+    </div>
+    <p class="calc-proj-note" id="calcProjNote">Preencha ao menos um levantamento acima para ver a projeção.</p>
+  </section>
+
+  <!-- EXPORT -->
+  <div class="calc-export-row">
+    <button type="button" class="calc-btn calc-btn-primary" id="calcCopyBtn">Copiar planilha como texto</button>
+    <button type="button" class="calc-btn calc-btn-ghost" id="calcPrintBtn">Imprimir</button>
+  </div>
+
+  <p class="calc-footer-note">Ferramenta educativa. Não substitui a orientação de um profissional de educação física.</p>
+
+</main>
 </div>
 
 <div class="kp" id="p-home">
