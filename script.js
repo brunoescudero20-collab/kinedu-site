@@ -1,5 +1,5 @@
 function SP(k){
-  ['landing','home','article','category','path','library','glossary','profile','search','art1','art2','art3','art4','art5'].forEach(function(p){
+  ['landing','home','article','category','path','library','glossary','profile','search','calculator','art1','art2','art3','art4','art5'].forEach(function(p){
     var e=document.getElementById('p-'+p); if(e) e.style.display='none';
   });
   var pg=document.getElementById('p-'+k);
@@ -12,6 +12,16 @@ function SP(k){
 }
 window.addEventListener('popstate',function(e){if(e.state&&e.state.p)SP(e.state.p);});
 document.addEventListener('DOMContentLoaded',function(){SP((location.hash||'#landing').replace('#',''));});
+
+// landing search bar
+function landingSearch(e){
+  if(e) e.preventDefault();
+  var q=document.getElementById('ldSearch').value.trim();
+  if(!q) return false;
+  SP('search');
+  quickSearch(q);
+  return false;
+}
 
 // article
 // Reading progress
