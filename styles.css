@@ -413,6 +413,8 @@ nav {
 .ref-list { display: flex; flex-direction: column; gap: 10px; counter-reset: ref; }
 .ref-item { display: flex; gap: 12px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 .ref-num { font-weight: 700; color: var(--primary); min-width: 20px; flex-shrink: 0; }
+.ref-link { color: var(--primary); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.ref-link:hover { text-decoration: underline; color: var(--accent); }
 
 /* ── Related Articles ── */
 .related-section { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); }
