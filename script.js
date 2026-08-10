@@ -481,7 +481,7 @@ document.querySelectorAll('.recent-remove').forEach(btn => {
     result.weeks.forEach(function(w){
       html += '<tr><th scope="row" style="font-weight:600;color:var(--text);white-space:nowrap">' + w.label + '</th>';
       w.sets.forEach(function(s, si){
-        html += '<td class="' + (s.amrap ? 'calc-set-amrap' : '') + '" data-label="Série ' + (si + 1) + '">' + calcFmt(s.load) + ' ' + unit + ' × ' + s.reps;
+        html += '<td class="' + (s.amrap ? 'calc-set-amrap' : '') + '" data-label="Série ' + (si + 1) + '">' + calcFmt(s.load) + ' ' + unit + ' × ' + s.reps + ' rep';
         if (cfg.showPlates){
           var pl = calcPlates(s.load, cfg.barWeight, unit);
           html += '<span class="calc-plates-note">' + calcPlatesText(pl, unit) + '</span>';
@@ -505,7 +505,7 @@ document.querySelectorAll('.recent-remove').forEach(btn => {
     var bbb50 = calcLoad(result.tm, 0.50, cfg.inc);
     var bbb60 = calcLoad(result.tm, 0.60, cfg.inc);
     html += '<div class="calc-bbb"><div class="calc-bbb-title">Boring But Big — 5×10</div>' +
-      '<div class="calc-bbb-row"><span>50%: <strong>' + calcFmt(bbb50) + ' ' + unit + ' × 10</strong></span><span>60%: <strong>' + calcFmt(bbb60) + ' ' + unit + ' × 10</strong></span></div>' +
+      '<div class="calc-bbb-row"><span>50%: <strong>' + calcFmt(bbb50) + ' ' + unit + ' × 10 rep</strong></span><span>60%: <strong>' + calcFmt(bbb60) + ' ' + unit + ' × 10 rep</strong></span></div>' +
       '<p class="calc-bbb-note">5 séries de 10 com carga leve, entre 50% e 60% do Training Max. Não é a série pesada repetida cinco vezes.</p></div>';
 
     resultsEl.innerHTML = html;
@@ -622,7 +622,7 @@ document.querySelectorAll('.recent-remove').forEach(btn => {
       var label = liftEl.querySelector('.calc-lift-name').textContent + (calcLastExampleFlags[k] ? ' (exemplo)' : '');
       lines.push(label + ' — TM: ' + calcFmt(res.tm) + ' ' + calcCfg.unit + ' (1RM: ' + calcFmt(res.oneRM) + ' ' + calcCfg.unit + ')');
       res.weeks.forEach(function(w){
-        var parts = w.sets.map(function(s){ return calcFmt(s.load) + calcCfg.unit + ' x' + s.reps; });
+        var parts = w.sets.map(function(s){ return calcFmt(s.load) + calcCfg.unit + ' x' + s.reps + ' rep'; });
         lines.push('  ' + w.label + ': ' + parts.join(', '));
       });
       lines.push('');
