@@ -32,7 +32,7 @@ Don't search only the exact phrase the user typed. Build a small semantic map: t
 
 Call `mcp__Scite__search_literature` with `term` set to your expanded queries (run a few variations — one broad, a couple narrower) and `date_from` set to the computed floor year. Within the results, prefer in this order: meta-analyses and systematic reviews > RCTs > position stands / consensus statements > prospective cohort studies > narrative reviews > everything else. A recent narrative review is not better evidence than a slightly-older meta-analysis — recency is a filter (must be within 10 years), not a ranking signal.
 
-Pull up to ~15-20 candidates across your queries before narrowing — you'll reject a good number of them in the next step, and starting narrow means you run out of good options.
+Pull up to ~15-20 candidates across your queries before narrowing — you'll reject a good number of them in the next step, and starting narrow means you run out of good options. That said, the Scite tool's free tier is small (a handful of searches before it starts asking for a paid plan — this has already happened mid-session on this project once), so don't burn it on redundant queries: the `titles`/`dois` parameters accept arrays, so batch several candidates into one call instead of one-at-a-time lookups, and stop broadening your search once you have enough good candidates rather than exhaustively covering every possible phrasing. If you hit the quota wall mid-run, stop and tell the user what you'd verified so far and what's still unconfirmed — don't guess at the rest to finish the batch.
 
 ### 4. Validate every candidate
 
@@ -44,7 +44,7 @@ For each candidate you're seriously considering, check:
   ```
   grep -c "doi.org/<DOI>" index.html
   ```
-  If it's already there (as a `.ref-link` or `.rc-doi`), skip it — don't add a duplicate. This also means: before starting a run, it's worth grepping `href="https://doi.org/` in `index.html` once to see what's already covered, so you don't waste searches re-finding papers already on the site.
+  If it's already there (as a `.ref-link` or `.rc-doi`), skip it — don't add a duplicate. Do this DOI check before you spend a search on a paper, not after — grep `href="https://doi.org/` once at the start of a run to see what's already covered. One caveat: a few `research-card` entries on `p-library` predate real DOI links (still `href="#"`) and won't show up in a DOI grep — for those, also eyeball candidate titles against the existing `.rc-title` text on the library page so you don't re-add a paper that's already there under a placeholder link.
 - **Actually relevant**, not just keyword-adjacent. A hit that mentions the topic in passing while being about something else isn't a fit.
 
 Anything that fails one of these gets left out — don't explain the near-misses in the final card, just don't include them. (You can mention what you rejected and why in your summary to the user, though — that's useful signal, not clutter.)
@@ -72,11 +72,14 @@ Don't inflate dots because a paper is well-cited or recent — the dots reflect 
 
 ### 6. Write the summary honestly
 
-The `rc-abstract` text is the one-paragraph translation of the paper for a KinEdu reader. Ground it strictly in the abstract (and full-text excerpts, when Scite returns them) — pull out the concrete numbers (sample size, effect size, key comparison) the way the existing cards do (e.g. "*21 estudos (n=476)*", "*44% maior hipertrofia*", bolded). Do not:
+The `rc-abstract` text is the one-paragraph translation of the paper for a KinEdu reader. Ground it strictly in the abstract (and full-text excerpts, when Scite returns them) — pull out the concrete numbers (sample size, effect size, key comparison) the way the existing cards do (e.g. "*21 estudos (n=476)*", bolded). Do not:
 - turn a correlation into causation the paper didn't claim
-- generalize a narrow population (e.g. "40 untrained women") to "everyone" without saying who was studied
+- generalize a narrow population (e.g. "45 untrained women") to "everyone," or to the wrong population, without saying who was actually studied
+- change the exercise, intervention, or comparison the study actually used — write down what's in the abstract in front of you, not what a similar-sounding study on the topic would probably have done
 - add a practical recommendation the authors didn't make, even if it seems like a reasonable inference — if you want to add a practical note, keep it clearly separate from what the study found (e.g. a closing sentence, not folded into the finding itself)
 - silently drop caveats the authors themselves flagged (small sample, single population, industry funding, etc.) if they're central to interpreting the result
+
+This isn't a hypothetical risk — one of the existing `research-card` entries on the live site (Pedrosa et al. 2022, still on `p-library` as of this skill being written) describes the cited study as "40 participantes treinados... agachamento em amplitude parcial vs. completa... 44% maior hipertrofia de quadríceps." The actual paper (same DOI, verified via Scite) is 45 *untrained women*, a *knee-extension* exercise across four ROM conditions, with no single 44%-style headline figure in the abstract. Nobody added a fake DOI here — the DOI is completely real — but the summary text drifted from what the paper says into something that reads like a different, more quotable study. That's the exact failure mode this step exists to prevent: verifying the citation is not the same as verifying the description of it. Reread the abstract text you're about to write against the actual abstract one more time before finalizing.
 
 Write in Portuguese, matching the register of the existing cards. Keep bibliographic fields (title, author names, journal name) in their original language/spelling — those don't get translated.
 
@@ -85,7 +88,7 @@ Write in Portuguese, matching the register of the existing cards. Keep bibliogra
 Produce one `research-card` block per accepted study, following this exact shape (this is real markup lifted from `p-library` in `index.html` — match it, don't improvise a new structure):
 
 ```html
-<div class="research-card" onclick="location.href='#'" style="cursor:pointer">
+<div class="research-card">
   <div class="rc-top">
     <span class="ev-badge eb-rct">RCT</span>
     <div class="rc-title-block">
@@ -97,6 +100,7 @@ Produce one `research-card` block per accepted study, following this exact shape
   <div class="rc-abstract">{PT summary, quantitative highlights in <strong></strong>}</div>
   <div class="rc-footer">
     <span class="rc-tag rt-{slug}">{Tag label}</span>
+    <span class="rc-tag rt-{slug2}">{Second tag label, only if a second one genuinely applies}</span>
     <div class="evidence-grade"><span class="eg-label">Evidência:</span><div class="eg-dots">{5 eg-dot divs, on/off per table above}</div></div>
     <span class="rc-year">{Year}</span>
     <a class="rc-doi" href="https://doi.org/{DOI}" target="_blank" rel="noopener noreferrer">DOI →</a>
@@ -104,7 +108,7 @@ Produce one `research-card` block per accepted study, following this exact shape
 </div>
 ```
 
-Note the existing cards on the site currently have `href="#"` placeholders on `rc-doi` — always use the real DOI link for anything you add, and if you're touching a card that already had a placeholder, it's worth fixing that too (call it out to the user rather than doing it silently, since it's outside what they asked for).
+Don't add an `onclick`/`cursor:pointer` to the card — the existing ones on the site used to have `onclick="location.href='sc-article.html'"`, which was broken (malformed escaping threw a JS error on every click) and pointed at a page that doesn't exist in this SPA anyway. That's been removed from all five existing cards; the `rc-doi` link is the card's only real destination. Some existing cards still have `href="#"` placeholders where the DOI was never filled in — if you happen to verify one of those exact papers in an unrelated run, it's worth fixing while you're there (call it out to the user, don't do it silently), but don't go hunting for them as their own task unless asked.
 
 Show the drafted cards to the user (render them in your response, or describe them clearly) before writing anything to disk. This is the validation gate from the user's original spec — "PENDING_REVIEW" here just means: you show them, they say yes, then you edit files.
 
