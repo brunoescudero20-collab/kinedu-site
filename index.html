@@ -104,7 +104,7 @@
       <li><a href="#library" onclick="SP('library');return false;">Pesquisa</a></li>
       <li><a href="#glossary" onclick="SP('glossary');return false;">Glossário</a></li>
     </ul>
-    <div class="nav-actions"><button class="btn-primary-sm">Criar conta grátis</button></div>
+    <div class="nav-actions"><button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button></div>
   </div>
 </nav>
 
@@ -359,8 +359,8 @@
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
       </div>
-      <button class="btn-ghost" onclick="SP('profile')">Entrar</button>
-      <button class="btn-primary" onclick="SP('profile')">Criar conta</button>
+      <button class="btn-ghost" onclick="SPAuth('login')">Entrar</button>
+      <button class="btn-primary" onclick="SPAuth('signup')">Criar conta</button>
     </div>
   </div>
 </nav>
@@ -536,7 +536,7 @@
       <button class="icon-btn" title="Compartilhar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       </button>
-      <button class="btn-primary-sm">Criar conta grátis</button>
+      <button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button>
     </div>
   </div>
 </nav>
@@ -967,7 +967,7 @@
       <li><a href="#library" onclick="SP('library');return false;">Pesquisa</a></li>
       <li><a href="#glossary" onclick="SP('glossary');return false;">Glossário</a></li>
     </ul>
-    <div class="nav-actions"><button class="btn-primary-sm" onclick="SP('profile')">Criar conta grátis</button></div>
+    <div class="nav-actions"><button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button></div>
   </div>
 </nav>
 
@@ -1082,7 +1082,7 @@
     </ul>
     <div class="nav-actions">
       <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-      <button class="btn-primary-sm">Criar conta grátis</button>
+      <button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button>
     </div>
   </div>
 </nav>
@@ -1391,7 +1391,7 @@ function setLvl(el){
       <li><a href="#library" onclick="SP('library');return false;">Pesquisa</a></li>
       <li><a href="#glossary" onclick="SP('glossary');return false;">Glossário</a></li>
     </ul>
-    <div class="nav-actions"><button class="btn-primary-sm">Criar conta grátis</button></div>
+    <div class="nav-actions"><button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button></div>
   </div>
 </nav>
 
@@ -1643,7 +1643,7 @@ function setLvl(el){
       <li><a href="#library" onclick="SP('library');return false;" class="active">Pesquisa</a></li>
       <li><a href="#glossary" onclick="SP('glossary');return false;">Glossário</a></li>
     </ul>
-    <div class="nav-actions"><button class="btn-primary-sm">Criar conta grátis</button></div>
+    <div class="nav-actions"><button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button></div>
   </div>
 </nav>
 
@@ -1839,7 +1839,7 @@ function setLvl(el){
       <li><a href="#library" onclick="SP('library');return false;">Pesquisa</a></li>
       <li><a href="#glossary" onclick="SP('glossary');return false;" class="active">Glossário</a></li>
     </ul>
-    <div class="nav-actions"><button class="btn-primary-sm">Criar conta grátis</button></div>
+    <div class="nav-actions"><button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button></div>
   </div>
 </nav>
 
@@ -2181,6 +2181,48 @@ function setLvl(el){
 
 </div>
 
+<div class="kp" id="p-auth">
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;">
+      <div class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" fill="none" stroke="#F39C12" stroke-width="1.5"/>
+          <path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      Kin<span>Edu</span>
+    </a>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-toggle" role="group" aria-label="Entrar ou criar conta">
+      <button type="button" class="auth-toggle-btn" data-auth-mode="login" aria-pressed="true" onclick="setAuthMode('login')">Entrar</button>
+      <button type="button" class="auth-toggle-btn" data-auth-mode="signup" aria-pressed="false" onclick="setAuthMode('signup')">Criar conta</button>
+    </div>
+
+    <h1 class="auth-title" id="authTitle">Entrar na sua conta</h1>
+    <p class="auth-sub" id="authSub">Informe seu login e senha para continuar.</p>
+
+    <form class="auth-form" onsubmit="return submitAuth(event)">
+      <div class="auth-field">
+        <label class="auth-label" for="authLogin">Login</label>
+        <input class="auth-input" type="text" id="authLogin" autocomplete="username" placeholder="seu usuário ou e-mail" required>
+      </div>
+      <div class="auth-field">
+        <label class="auth-label" for="authPassword">Senha</label>
+        <input class="auth-input" type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="auth-submit" id="authSubmitBtn">Entrar</button>
+    </form>
+
+    <a class="auth-back" href="#landing" onclick="SP('landing');return false;">← Voltar ao início</a>
+  </div>
+</div>
+</div>
+
 <div class="kp" id="p-profile">
 <nav>
   <div class="nav-inner">
@@ -2452,7 +2494,7 @@ function setLvl(el){
       <li><a href="#glossary" onclick="SP('glossary');return false;">Glossário</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="btn-primary-sm">Criar conta</button>
+      <button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta</button>
     </div>
   </div>
 </nav>
@@ -2917,7 +2959,7 @@ function setLvl(el){
     </nav>
     <div class="nav-actions">
       <button class="icon-btn" title="Buscar" onclick="SP('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-      <button class="btn-primary-sm" onclick="SP('profile')">Criar conta grátis</button>
+      <button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button>
     </div>
   </div>
 </nav>
@@ -3042,7 +3084,7 @@ function setLvl(el){
     </nav>
     <div class="nav-actions">
       <button class="icon-btn" title="Buscar" onclick="SP('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-      <button class="btn-primary-sm" onclick="SP('profile')">Criar conta grátis</button>
+      <button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button>
     </div>
   </div>
 </nav>
@@ -3167,7 +3209,7 @@ function setLvl(el){
     </nav>
     <div class="nav-actions">
       <button class="icon-btn" title="Buscar" onclick="SP('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-      <button class="btn-primary-sm" onclick="SP('profile')">Criar conta grátis</button>
+      <button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button>
     </div>
   </div>
 </nav>
@@ -3292,7 +3334,7 @@ function setLvl(el){
     </nav>
     <div class="nav-actions">
       <button class="icon-btn" title="Buscar" onclick="SP('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-      <button class="btn-primary-sm" onclick="SP('profile')">Criar conta grátis</button>
+      <button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button>
     </div>
   </div>
 </nav>
@@ -3417,7 +3459,7 @@ function setLvl(el){
     </nav>
     <div class="nav-actions">
       <button class="icon-btn" title="Buscar" onclick="SP('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-      <button class="btn-primary-sm" onclick="SP('profile')">Criar conta grátis</button>
+      <button class="btn-primary-sm" onclick="SPAuth('signup')">Criar conta grátis</button>
     </div>
   </div>
 </nav>

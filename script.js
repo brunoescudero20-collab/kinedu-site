@@ -1,5 +1,5 @@
 function SP(k){
-  ['landing','home','article','category','categories','category-soon','path','library','glossary','profile','search','calculator','art1','art2','art3','art4','art5'].forEach(function(p){
+  ['landing','home','article','category','categories','category-soon','path','library','glossary','profile','auth','search','calculator','art1','art2','art3','art4','art5'].forEach(function(p){
     var e=document.getElementById('p-'+p); if(e) e.style.display='none';
   });
   var pg=document.getElementById('p-'+k);
@@ -14,6 +14,26 @@ function SPCategorySoon(name){
   var el=document.getElementById('categorySoonName');
   if(el) el.textContent=name;
   SP('category-soon');
+}
+
+function setAuthMode(mode){
+  document.querySelectorAll('[data-auth-mode]').forEach(function(b){
+    b.setAttribute('aria-pressed', b.dataset.authMode===mode ? 'true':'false');
+  });
+  var isLogin = mode==='login';
+  document.getElementById('authTitle').textContent = isLogin ? 'Entrar na sua conta' : 'Criar sua conta';
+  document.getElementById('authSub').textContent = isLogin ? 'Informe seu login e senha para continuar.' : 'Escolha um login e uma senha — é só isso que pedimos.';
+  document.getElementById('authSubmitBtn').textContent = isLogin ? 'Entrar' : 'Criar conta';
+  document.getElementById('authPassword').setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
+}
+function SPAuth(mode){
+  setAuthMode(mode || 'login');
+  SP('auth');
+}
+function submitAuth(e){
+  e.preventDefault();
+  SP('profile');
+  return false;
 }
 window.addEventListener('popstate',function(e){if(e.state&&e.state.p)SP(e.state.p);});
 document.addEventListener('DOMContentLoaded',function(){SP((location.hash||'#landing').replace('#',''));});
