@@ -1,0 +1,7 @@
+Seeded 10 categories.
+OK art1 — "Os 3 Mecanismos da Hipertrofia Muscular" | autores: Dr. Mateus Ferreira (CSCS · Fisiologista do Exercício) | publicado: 2025-06-01 | leitura: 14min | tag: Fisiologia do Exercício | body_html: 16803 chars | views no site (não migrado, é texto fixo): 3.1k visualizações
+OK art2 — "Volume de Treino e Hipertrofia Muscular" | autores: Dr. Mateus Ferreira (CSCS · Ciência do Exercício) | publicado: 2025-06-01 | leitura: 14min | tag: Programação de Treino | body_html: 15890 chars | views no site (não migrado, é texto fixo): 2.8k visualizações
+OK art3 — "Amplitude de Movimento e Hipertrofia Muscular" | autores: Dr. Mateus Ferreira (CSCS · Biomecânica Aplicada) | publicado: 2025-06-01 | leitura: 16min | tag: Biomecânica | body_html: 17960 chars | views no site (não migrado, é texto fixo): 2.1k visualizações
+OK art4 — "Proteína e Síntese Proteica Muscular" | autores: Camila Lemos (MSc Nutrição Esportiva · CISSN) | publicado: 2025-06-01 | leitura: 15min | tag: Nutrição Esportiva | body_html: 18811 chars | views no site (não migrado, é texto fixo): 3.4k visualizações
+OK art5 — "Frequência de Treino e Hipertrofia Muscular" | autores: Rafael Ponte (MSc Ciência do Exercício · CSCS) | publicado: 2025-06-01 | leitura: 13min | tag: Programação de Treino | body_html: 17339 chars | views no site (não migrado, é texto fixo): 1.9k visualizações
+Done. Inserted 5, skipped 0.

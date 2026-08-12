@@ -1,0 +1,8 @@
+# backend
+backend/node_modules/
+backend/.env
+backend/*.log
+backend/npm-debug.log*
+
+# OS/editor
+.DS_Store
