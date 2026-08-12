@@ -14,7 +14,33 @@ function SP(k){
   var m={categories:'Categorias',path:'Trilhas',library:'Pesquisa',glossary:'Glossário',article:'Artigos'};
   document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');if(m[k]&&a.textContent.trim()===m[k])a.classList.add('active');});
   if(k==='profile'){try{buildHeatmap();}catch(e){}}
+  // Log a real article view — fire-and-forget, never blocks the page switch above.
+  if(/^art\d+$/.test(k) && window.KinEduAPI){
+    KinEduAPI.getArticle(k).then(function(a){ return KinEduAPI.logArticleView(a.id); }).catch(function(){});
+  }
 }
+
+// ── REAL DATA HYDRATION ──
+// Replaces the hardcoded placeholder numbers in the static HTML with real
+// counts from the backend once they're available. If the API is unreachable
+// the static numbers already in index.html stay exactly as they were.
+(function(){
+  if(!window.KinEduAPI) return;
+
+  KinEduAPI.getStats().then(function(stats){
+    var el = document.getElementById('statTotalArticles');
+    if(el) el.textContent = String(stats.total_articles);
+  }).catch(function(){});
+
+  KinEduAPI.getCategories().then(function(cats){
+    var bySlug = {};
+    cats.forEach(function(c){ bySlug[c.slug] = c.article_count; });
+    document.querySelectorAll('[data-cat-count]').forEach(function(el){
+      var slug = el.getAttribute('data-cat-count');
+      if(Object.prototype.hasOwnProperty.call(bySlug, slug)) el.textContent = String(bySlug[slug]);
+    });
+  }).catch(function(){});
+})();
 function SPCategorySoon(name){
   var el=document.getElementById('categorySoonName');
   if(el) el.textContent=name;
@@ -37,7 +63,29 @@ function SPAuth(mode){
 }
 function submitAuth(e){
   e.preventDefault();
-  SP('profile');
+  var errEl = document.getElementById('authError');
+  var showErr = function(msg){ if(errEl){ errEl.textContent = msg; errEl.className = 'calc-field-err visible'; } };
+  if(errEl){ errEl.className = 'calc-field-err'; errEl.textContent=''; }
+
+  if(!window.KinEduAPI){ SP('profile'); return false; }
+
+  var login = document.getElementById('authLogin').value.trim();
+  var password = document.getElementById('authPassword').value;
+  var isLogin = document.querySelector('[data-auth-mode="login"]').getAttribute('aria-pressed') === 'true';
+  var btn = document.getElementById('authSubmitBtn');
+  var original = btn.textContent;
+  btn.textContent = isLogin ? 'Entrando…' : 'Criando conta…';
+  btn.disabled = true;
+
+  var req = isLogin ? KinEduAPI.login(login, password) : KinEduAPI.signup(login, password);
+  req.then(function(){
+    SP('profile');
+  }).catch(function(err){
+    showErr((err && err.data && err.data.message) || 'Não foi possível concluir. Tente novamente.');
+  }).finally(function(){
+    btn.textContent = original;
+    btn.disabled = false;
+  });
   return false;
 }
 window.addEventListener('popstate',function(e){if(e.state&&e.state.p)SP(e.state.p);});
@@ -297,32 +345,73 @@ function setTab(btn, type) {
   });
 }
 
+// Builds a .res-card for a real article returned by GET /api/search — same
+// markup/classes the static demo cards used, just filled with real fields
+// instead of invented ones (no fabricated difficulty level or read time
+// when the article doesn't have one).
+function buildArticleResultCard(a) {
+  const title = a.title_pt || a.title;
+  const dateStr = a.published_at ? new Date(a.published_at).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }) : '';
+  const metaBits = [`<span class="res-type-badge rtb-article">Artigo</span>`];
+  if (a.category_name) metaBits.push(`<span class="res-cat">${a.category_name}</span>`);
+  if (a.category_name && dateStr) metaBits.push(`<span class="res-dot"></span>`);
+  if (dateStr) metaBits.push(`<span class="res-date">${dateStr}</span>`);
+  const footerBits = [];
+  if (a.category_name) footerBits.push(`<span class="res-tag">${a.category_name}</span>`);
+  if (a.reading_time_minutes) footerBits.push(`<span class="res-read-time">${a.reading_time_minutes} min</span>`);
+  return `<a class="res-card" href="#${a.slug}" onclick="SP('${a.slug}');return false;">
+    <div class="res-card-top">
+      <span class="res-card-icon">📄</span>
+      <div style="flex:1;min-width:0">
+        <div class="res-card-meta">${metaBits.join('')}</div>
+        <div class="res-title">${title}</div>
+        <div class="res-excerpt">${a.excerpt || ''}</div>
+        <div class="res-footer">${footerBits.join('')}</div>
+      </div>
+    </div>
+  </a>`;
+}
+
+function renderRealSearchResults(q, results) {
+  const list = document.querySelector('#sec-articles .result-list');
+  const countEl = document.querySelector('#sec-articles .rs-count');
+  const badge = document.querySelector('.results-count-badge');
+  if (list) list.innerHTML = results.length
+    ? results.map(buildArticleResultCard).join('')
+    : `<p style="padding:8px 0;color:var(--text-muted,#888)">Nenhum artigo encontrado para "${q}".</p>`;
+  if (countEl) countEl.textContent = `${results.length} resultado${results.length !== 1 ? 's' : ''}`;
+  if (badge) badge.textContent = String(results.length);
+
+  if (results.length === 0) {
+    document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = 'none');
+    document.getElementById('noResults').classList.add('visible');
+  } else {
+    document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = '');
+    document.getElementById('noResults').classList.remove('visible');
+  }
+}
+
 function doSearch() {
   const q = document.getElementById('heroSearch').value.trim();
   if (!q) return;
   currentQuery = q;
   document.querySelector('.results-query').innerHTML = `Resultados para <strong>"${q}"</strong>`;
   document.getElementById('navSearch').value = q;
-  // Simulate: if no match, show empty state
-  if (q.length > 0 && !['hipertrofia','fisiologia','força','periodização','nutrição','mtor','treino','músculo','proteína','vo2','volume','amplitude'].some(k => q.toLowerCase().includes(k))) {
-    document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = 'none');
-    document.getElementById('noResults').classList.add('visible');
-    document.querySelector('.results-count-badge').textContent = '0';
-  } else {
-    document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = '');
-    document.getElementById('noResults').classList.remove('visible');
-    document.querySelector('.results-count-badge').textContent = '23';
-  }
+
+  if (!window.KinEduAPI) return;
+  KinEduAPI.logSearch(q);
+  KinEduAPI.search(q).then(data => {
+    renderRealSearchResults(q, data.articles || []);
+  }).catch(() => {
+    renderRealSearchResults(q, []);
+  });
 }
 
 function quickSearch(q) {
   document.getElementById('heroSearch').value = q;
   document.getElementById('navSearch').value = q;
-  doSearch();
-  document.getElementById('noResults').classList.remove('visible');
-  document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = '');
-  document.querySelector('.results-count-badge').textContent = '23';
   document.querySelector('.results-query').innerHTML = `Resultados para <strong>"${q}"</strong>`;
+  doSearch();
 }
 
 // Nav search sync
