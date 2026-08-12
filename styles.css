@@ -3237,3 +3237,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,
 .auth-back{display:inline-block;margin-top:20px;font-size:13px;font-weight:600;color:var(--text-muted);text-decoration:none}
 .auth-back:hover{color:var(--primary)}
 .auth-toggle-btn:focus-visible,.auth-input:focus-visible,.auth-submit:focus-visible,.auth-back:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ─── PAGE TRANSITION ─── */
+body{padding-bottom:68px}
+@keyframes kpFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.kp.kp-anim{animation:kpFadeIn .32s ease}
+@media(prefers-reduced-motion:reduce){
+  .kp.kp-anim{animation:none}
+}
+
+/* ─── BOTTOM NAV BAR ─── */
+.bottom-nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:200;display:flex;gap:2px;background:rgba(255,255,255,.85);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:100px;padding:6px;box-shadow:var(--shadow-lg)}
+.bn-btn{width:44px;height:44px;border-radius:50%;border:none;background:none;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,color .2s}
+.bn-btn svg{width:20px;height:20px}
+.bn-btn:hover{background:var(--border-light);color:var(--primary)}
+.bn-btn:active{background:rgba(22,58,95,.1)}
+.bn-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){
+  .bn-btn{transition:none}
+}
+@media(max-width:480px){
+  .bottom-nav{bottom:10px;padding:5px}
+  .bn-btn{width:42px;height:42px}
+}

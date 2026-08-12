@@ -3,7 +3,12 @@ function SP(k){
     var e=document.getElementById('p-'+p); if(e) e.style.display='none';
   });
   var pg=document.getElementById('p-'+k);
-  if(pg) pg.style.display='block';
+  if(pg){
+    pg.style.display='block';
+    pg.classList.remove('kp-anim');
+    void pg.offsetWidth;
+    pg.classList.add('kp-anim');
+  }
   window.scrollTo(0,0);
   try{history.pushState({p:k},'','#'+k);}catch(e){}
   var m={categories:'Categorias',path:'Trilhas',library:'Pesquisa',glossary:'Glossário',article:'Artigos'};
