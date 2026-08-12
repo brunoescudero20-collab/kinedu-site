@@ -3197,3 +3197,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,
   .calc-layout{padding:0;max-width:100%}
   .calc-card{border:1px solid #ccc;box-shadow:none;break-inside:avoid;margin-bottom:12px}
 }
+
+/* ─── CATEGORIES INDEX ─── */
+.cats-hero{padding-top:60px;background:var(--primary);position:relative;overflow:hidden}
+.cats-hero-inner{max-width:1280px;margin:0 auto;padding:48px 32px 56px;position:relative;z-index:1}
+.cats-eb{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.cats-hero-inner h1{font-family:var(--font-head);font-size:clamp(28px,4vw,40px);font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:10px}
+.cats-hero-inner p{font-size:15px;color:rgba(255,255,255,.6);max-width:560px;line-height:1.6}
+
+.cats-layout{max-width:1280px;margin:0 auto;padding:40px 32px 96px}
+.cats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.cats-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:border-color .2s,box-shadow .2s,transform .2s}
+.cats-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.cats-ic{font-size:26px;display:block;margin-bottom:12px}
+.cats-name{font-family:var(--font-head);font-weight:700;font-size:16px;color:var(--text);margin-bottom:6px}
+.cats-desc{font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:12px}
+.cats-count{font-size:12px;font-weight:600;color:var(--primary)}
+.cats-tag-soon{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--text-light);background:var(--border-light);padding:3px 9px;border-radius:100px}
+.cats-soon{opacity:.75}
+
+@media(max-width:960px){.cats-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.cats-layout{padding:32px 20px 64px}.cats-grid{grid-template-columns:1fr}}

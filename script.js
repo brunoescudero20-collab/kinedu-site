@@ -1,14 +1,19 @@
 function SP(k){
-  ['landing','home','article','category','path','library','glossary','profile','search','calculator','art1','art2','art3','art4','art5'].forEach(function(p){
+  ['landing','home','article','category','categories','category-soon','path','library','glossary','profile','search','calculator','art1','art2','art3','art4','art5'].forEach(function(p){
     var e=document.getElementById('p-'+p); if(e) e.style.display='none';
   });
   var pg=document.getElementById('p-'+k);
   if(pg) pg.style.display='block';
   window.scrollTo(0,0);
   try{history.pushState({p:k},'','#'+k);}catch(e){}
-  var m={category:'Categorias',path:'Trilhas',library:'Pesquisa',glossary:'Glossário',article:'Artigos'};
+  var m={categories:'Categorias',path:'Trilhas',library:'Pesquisa',glossary:'Glossário',article:'Artigos'};
   document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');if(m[k]&&a.textContent.trim()===m[k])a.classList.add('active');});
   if(k==='profile'){try{buildHeatmap();}catch(e){}}
+}
+function SPCategorySoon(name){
+  var el=document.getElementById('categorySoonName');
+  if(el) el.textContent=name;
+  SP('category-soon');
 }
 window.addEventListener('popstate',function(e){if(e.state&&e.state.p)SP(e.state.p);});
 document.addEventListener('DOMContentLoaded',function(){SP((location.hash||'#landing').replace('#',''));});
