@@ -1,0 +1,35 @@
+name: Deploy static site to GitHub Pages
+
+on:
+  push:
+    branches: [claude/static-site-preview-8csdsv]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # Static frontend only — index.html, styles.css, script.js, api.js.
+          # backend/ is a separate Node+Postgres service and isn't part of
+          # this deploy; without it, api.js falls back to the static content
+          # already baked into index.html (see the progressive-enhancement
+          # note in api.js/script.js).
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
