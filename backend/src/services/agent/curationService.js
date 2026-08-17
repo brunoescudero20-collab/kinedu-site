@@ -2,12 +2,17 @@ import { pool } from '../../db/pool.js';
 import { isValidDoi, isValidPmid, STUDY_TYPES } from '../../utils/validation.js';
 import { minimumPublicationDate, isWithinPublicationWindow } from '../../utils/dates.js';
 
-// Full candidate lifecycle (docs/agent-api.md). The agent may drive a
-// candidate as far as PENDING_REVIEW. APPROVED and PUBLISHED are reachable
-// states in the data model (a human reviewer sets them from the future
-// admin/review UI) but are never valid targets for an agent-initiated
-// status update — enforced in updateCandidateStatus below, not just by
-// convention.
+// Full candidate lifecycle (docs/agent-api.md, docs/admin-review.md).
+// Shared by both routes/agent.js and routes/admin.js — living under
+// services/agent/ is a naming leftover from when only the agent used it,
+// not a boundary; the functions below with "human review" in their
+// section header are only ever called from routes/admin.js.
+//
+// The agent may drive a candidate as far as PENDING_REVIEW. APPROVED and
+// PUBLISHED are reachable states in the data model, set only by
+// approveCandidate/rejectCandidate below (called from the admin panel) —
+// never valid targets for an agent-initiated status update, enforced in
+// updateCandidateStatus, not just by convention.
 export const AGENT_WRITABLE_STATUSES = ['discovered', 'validating', 'validated', 'pending_review', 'rejected', 'duplicate', 'invalid'];
 export const HUMAN_ONLY_STATUSES = ['approved', 'published'];
 
@@ -60,7 +65,12 @@ export async function updateRun(id, patch) {
 
 // ── curation_candidates ─────────────────────────────────────────────────
 
-export async function listCandidates({ status, runId, topic, page = 1, pageSize = 20 } = {}) {
+// `category` and `topic` are treated as the same underlying field
+// (curation_candidates.topic is free text, usually set by the agent to a
+// category name) — `topic` does an exact match, `category` an ILIKE
+// substring, so the admin UI's category dropdown and the agent's exact
+// topic filter both work against the same column without duplicating it.
+export async function listCandidates({ status, runId, topic, category, studyType, year, discoveredFrom, discoveredTo, page = 1, pageSize = 20 } = {}) {
   const limit = Math.min(Math.max(parseInt(pageSize, 10) || 20, 1), 100);
   const offset = (Math.max(parseInt(page, 10) || 1, 1) - 1) * limit;
   const where = [];
@@ -68,6 +78,11 @@ export async function listCandidates({ status, runId, topic, page = 1, pageSize 
   if (status) { params.push(status); where.push(`status = $${params.length}`); }
   if (runId) { params.push(runId); where.push(`run_id = $${params.length}`); }
   if (topic) { params.push(topic); where.push(`topic = $${params.length}`); }
+  if (category) { params.push(`%${category}%`); where.push(`topic ILIKE $${params.length}`); }
+  if (studyType) { params.push(studyType); where.push(`study_type = $${params.length}`); }
+  if (year) { params.push(parseInt(year, 10)); where.push(`extract(year FROM published_at) = $${params.length}`); }
+  if (discoveredFrom) { params.push(discoveredFrom); where.push(`created_at >= $${params.length}`); }
+  if (discoveredTo) { params.push(discoveredTo); where.push(`created_at <= $${params.length}`); }
   const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
   const { rows } = await pool.query(`SELECT * FROM curation_candidates ${whereSql} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`, params);
   const { rows: countRows } = await pool.query(`SELECT count(*) FROM curation_candidates ${whereSql}`, params);
@@ -183,4 +198,67 @@ export async function updateCandidateStatus(id, newStatus, { rejectionReason } =
     [newStatus, rejectionReason || null, id],
   );
   return { updated: true, candidate: rows[0] };
+}
+
+// ── human review (admin panel) ───────────────────────────────────────────
+// The only code paths that can ever set 'approved' or 'published'. Both
+// require the candidate to currently be 'pending_review' — an admin can't
+// approve something the agent hasn't finished validating, and can't
+// re-approve/re-reject something already decided (returns invalidState
+// instead of silently overwriting a prior decision).
+
+export async function approveCandidate(id, adminUserId) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows: current } = await client.query('SELECT status FROM curation_candidates WHERE id = $1 FOR UPDATE', [id]);
+    if (!current.length) { await client.query('ROLLBACK'); return { notFound: true }; }
+    if (current[0].status !== 'pending_review') {
+      await client.query('ROLLBACK');
+      return { invalidState: true, currentStatus: current[0].status };
+    }
+    const { rows } = await client.query(
+      `UPDATE curation_candidates SET status = 'approved', reviewed_by = $1, reviewed_at = now() WHERE id = $2 RETURNING *`,
+      [adminUserId, id],
+    );
+    await client.query(
+      `INSERT INTO candidate_review_log (candidate_id, admin_user_id, action) VALUES ($1, $2, 'approved')`,
+      [id, adminUserId],
+    );
+    await client.query('COMMIT');
+    return { updated: true, candidate: rows[0] };
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+export async function rejectCandidate(id, adminUserId, reason) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows: current } = await client.query('SELECT status FROM curation_candidates WHERE id = $1 FOR UPDATE', [id]);
+    if (!current.length) { await client.query('ROLLBACK'); return { notFound: true }; }
+    if (current[0].status !== 'pending_review') {
+      await client.query('ROLLBACK');
+      return { invalidState: true, currentStatus: current[0].status };
+    }
+    const { rows } = await client.query(
+      `UPDATE curation_candidates SET status = 'rejected', rejection_reason = $1, reviewed_by = $2, reviewed_at = now() WHERE id = $3 RETURNING *`,
+      [reason, adminUserId, id],
+    );
+    await client.query(
+      `INSERT INTO candidate_review_log (candidate_id, admin_user_id, action, reason) VALUES ($1, $2, 'rejected', $3)`,
+      [id, adminUserId, reason],
+    );
+    await client.query('COMMIT');
+    return { updated: true, candidate: rows[0] };
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 }

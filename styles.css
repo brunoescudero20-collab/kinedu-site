@@ -3260,3 +3260,55 @@ body{padding-bottom:68px}
   .bottom-nav{bottom:10px;padding:5px}
   .bn-btn{width:42px;height:42px}
 }
+
+/* ─── ADMIN REVIEW PANEL (curadoria) ─── */
+.admin-main{max-width:920px;margin:0 auto;padding:32px 24px 80px}
+.admin-gate{max-width:420px;margin:60px auto;text-align:center;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:36px 28px;box-shadow:var(--shadow-sm)}
+.admin-gate-ic{font-size:32px;display:block;margin-bottom:12px}
+.admin-gate p{color:var(--text-muted);font-size:14px;margin-bottom:18px;line-height:1.5}
+
+.admin-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.admin-filters select,.admin-filters input{font-family:var(--font-body);font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;color:var(--text)}
+.admin-filters input{flex:1;min-width:140px}
+
+.admin-summary{font-size:13px;color:var(--text-muted);margin-bottom:14px;font-weight:600}
+.admin-list{display:flex;flex-direction:column;gap:16px}
+.admin-empty,.admin-loading{color:var(--text-muted);font-size:14px;padding:24px;text-align:center;background:#fff;border:1px dashed var(--border);border-radius:var(--radius)}
+
+.admin-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+.admin-card-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+.admin-status-badge{font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--border-light);color:var(--text-muted)}
+.admin-status-pending_review{background:#FEF3C7;color:#92400E}
+.admin-status-approved{background:#D1FAE5;color:#065F46}
+.admin-status-published{background:#DBEAFE;color:#1E40AF}
+.admin-status-rejected{background:#FEE2E2;color:#991B1B}
+.admin-status-duplicate,.admin-status-invalid{background:#F3F4F6;color:#4B5563}
+.admin-card-topic{font-size:11px;font-weight:600;color:var(--primary);background:rgba(22,58,95,.08);padding:4px 10px;border-radius:20px}
+.admin-card-tag{font-size:11px;color:var(--text-muted);background:var(--border-light);padding:4px 10px;border-radius:20px}
+
+.admin-card-title{font-family:var(--font-head);font-size:17px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:4px}
+.admin-card-title-orig{font-size:12.5px;color:var(--text-light);font-style:italic;margin-bottom:8px}
+.admin-card-meta{font-size:12.5px;color:var(--text-muted);margin-bottom:12px;line-height:1.6}
+
+.admin-checklist{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.admin-check{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:6px}
+.admin-check-ok{background:#ECFDF5;color:#047857}
+.admin-check-warn{background:#FFFBEB;color:#B45309}
+
+.admin-card-body{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.admin-detail{border-top:1px solid var(--border-light);padding:8px 0}
+.admin-detail summary{font-size:12.5px;font-weight:700;color:var(--text);cursor:pointer;list-style:none}
+.admin-detail summary::-webkit-details-marker{display:none}
+.admin-detail summary::before{content:'▸ ';color:var(--text-light)}
+.admin-detail[open] summary::before{content:'▾ '}
+.admin-detail p{font-size:13px;color:var(--text-muted);line-height:1.6;margin-top:6px;white-space:pre-wrap}
+
+.admin-card-actions{display:flex;flex-wrap:wrap;gap:10px;border-top:1px solid var(--border-light);padding-top:14px}
+.admin-btn{font-family:var(--font-body);font-size:13px;font-weight:700;border:none;border-radius:var(--radius-sm);padding:9px 18px;cursor:pointer;transition:opacity .15s}
+.admin-btn:hover{opacity:.85}
+.admin-btn-approve{background:#059669;color:#fff}
+.admin-btn-reject{background:#DC2626;color:#fff}
+.admin-btn-secondary{background:var(--border-light);color:var(--text);text-decoration:none;display:inline-flex;align-items:center}
+.admin-card-actions-readonly{color:var(--text-muted);font-size:12.5px}
+.admin-review-note{margin-right:12px}
+.admin-rejection-reason{color:#991B1B}

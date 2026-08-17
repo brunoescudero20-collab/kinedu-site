@@ -2259,6 +2259,8 @@ function setLvl(el){
   </div>
 </header>
 
+<div id="adminPanelLink"></div>
+
 <div class="profile-layout">
   <div>
     <!-- STATS -->
@@ -3567,6 +3569,75 @@ function setLvl(el){
         </div></div></div>
 </article>
 </div>
+</div>
+
+<div class="kp" id="p-admin-curation">
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#landing" onclick="SP('landing');return false;"><div class="logo-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2L14 6.5V12.5L9 16L4 12.5V6.5L9 2Z" stroke="#F39C12" stroke-width="1.5" fill="none"/><path d="M9 5V13M6 7.5L12 10.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>Kin<em>Edu</em></a>
+    <ul class="nav-links">
+      <li><a href="#categories" onclick="SP('categories');return false;">Artigos</a></li>
+      <li><a href="#categories" onclick="SP('categories');return false;">Categorias</a></li>
+      <li><a href="#path" onclick="SP('path');return false;">Trilhas</a></li>
+      <li><a href="#library" onclick="SP('library');return false;">Pesquisa</a></li>
+      <li><a href="#glossary" onclick="SP('glossary');return false;">Glossário</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="nav-avatar" onclick="SP('profile')" style="cursor:pointer" title="Meu perfil">RF</div>
+    </div>
+  </div>
+</nav>
+
+<header class="cats-hero">
+  <div class="cats-hero-inner">
+    <div class="cats-eb">Painel administrativo</div>
+    <h1>Revisão de Candidatos Científicos</h1>
+    <p>Artigos encontrados pelo agente de curadoria, aguardando aprovação humana antes de qualquer publicação no KinEdu.</p>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <div id="adminGate" class="admin-gate" style="display:none">
+    <span class="admin-gate-ic">🔒</span>
+    <p id="adminGateMsg">Esta área é restrita a administradores. Entre com uma conta autorizada para continuar.</p>
+    <button class="btn-primary-sm" onclick="SPAuth('login')">Entrar</button>
+  </div>
+
+  <div id="adminContent" style="display:none">
+    <div class="admin-filters">
+      <select id="adminFilterStatus" onchange="adminLoadCandidates()">
+        <option value="pending_review">Pendentes de revisão</option>
+        <option value="approved">Aprovados</option>
+        <option value="rejected">Rejeitados</option>
+        <option value="duplicate">Duplicados</option>
+        <option value="invalid">Inválidos</option>
+        <option value="">Todos os status</option>
+      </select>
+      <input id="adminFilterCategory" type="text" placeholder="Tema ou categoria" onkeydown="if(event.key==='Enter')adminLoadCandidates()">
+      <select id="adminFilterStudyType" onchange="adminLoadCandidates()">
+        <option value="">Todos os tipos de estudo</option>
+        <option value="meta_analysis">Meta-análise</option>
+        <option value="systematic_review">Revisão sistemática</option>
+        <option value="rct">Ensaio clínico randomizado</option>
+        <option value="cohort">Coorte</option>
+        <option value="cross_sectional">Transversal</option>
+        <option value="case_control">Caso-controle</option>
+        <option value="narrative_review">Revisão narrativa</option>
+        <option value="position_stand">Position stand</option>
+        <option value="case_report">Relato de caso</option>
+        <option value="pilot_study">Estudo piloto</option>
+        <option value="other">Outro</option>
+      </select>
+      <input id="adminFilterYear" type="number" placeholder="Ano" style="width:90px" onkeydown="if(event.key==='Enter')adminLoadCandidates()">
+      <button class="btn-primary-sm" onclick="adminLoadCandidates()">Filtrar</button>
+    </div>
+
+    <div id="adminSummary" class="admin-summary"></div>
+    <div id="adminList" class="admin-list"></div>
+  </div>
+
+</main>
 </div>
 
 <div class="bottom-nav" role="navigation" aria-label="Navegação">

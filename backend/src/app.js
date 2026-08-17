@@ -9,6 +9,7 @@ import { analyticsRouter } from './routes/analytics.js';
 import { statsRouter } from './routes/stats.js';
 import { authRouter } from './routes/auth.js';
 import { agentRouter } from './routes/agent.js';
+import { adminRouter } from './routes/admin.js';
 import { notFoundHandler, errorHandler } from './middleware/errorHandler.js';
 
 export const app = express();
@@ -33,6 +34,7 @@ app.use('/api/analytics', analyticsRouter);
 app.use('/api/stats', statsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/agent', agentRouter);
+app.use('/api/admin', adminRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

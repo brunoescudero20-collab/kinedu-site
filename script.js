@@ -1,5 +1,5 @@
 function SP(k){
-  ['landing','home','article','category','categories','category-soon','path','library','glossary','profile','auth','search','calculator','art1','art2','art3','art4','art5'].forEach(function(p){
+  ['landing','home','article','category','categories','category-soon','path','library','glossary','profile','auth','search','calculator','art1','art2','art3','art4','art5','admin-curation'].forEach(function(p){
     var e=document.getElementById('p-'+p); if(e) e.style.display='none';
   });
   var pg=document.getElementById('p-'+k);
@@ -13,7 +13,8 @@ function SP(k){
   try{history.pushState({p:k},'','#'+k);}catch(e){}
   var m={categories:'Categorias',path:'Trilhas',library:'Pesquisa',glossary:'Glossário',article:'Artigos'};
   document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');if(m[k]&&a.textContent.trim()===m[k])a.classList.add('active');});
-  if(k==='profile'){try{buildHeatmap();}catch(e){}}
+  if(k==='profile'){try{buildHeatmap();}catch(e){}try{renderAdminPanelLink();}catch(e){}}
+  if(k==='admin-curation'){try{adminEnter();}catch(e){}}
   // Log a real article view — fire-and-forget, never blocks the page switch above.
   if(/^art\d+$/.test(k) && window.KinEduAPI){
     KinEduAPI.getArticle(k).then(function(a){ return KinEduAPI.logArticleView(a.id); }).catch(function(){});
@@ -936,5 +937,207 @@ document.querySelectorAll('.recent-remove').forEach(btn => {
   }
 
   calcInit();
+
+})();
+// ── ADMIN REVIEW PANEL (curadoria) ──
+(function(){
+
+function adminEscapeHtml(s){
+  if(s===null||s===undefined) return '';
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function adminIsValidDoi(doi){ return typeof doi==='string' && /^10\.\d{4,9}\/\S+$/i.test(doi.trim()); }
+function adminIsValidPmid(pmid){ return typeof pmid==='string' && /^\d+$/.test(pmid.trim()); }
+function adminWithinTenYears(dateStr){
+  if(!dateStr) return null; // desconhecido, não aplicável
+  var d = new Date(dateStr);
+  if(isNaN(d.getTime())) return null;
+  var floor = new Date();
+  floor.setFullYear(floor.getFullYear()-10);
+  return d >= floor && d <= new Date();
+}
+function adminFmtDate(dateStr){
+  if(!dateStr) return '—';
+  var d = new Date(dateStr);
+  if(isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'short', year:'numeric'});
+}
+
+var ADMIN_STATUS_LABELS = {
+  discovered: 'Descoberto', validating: 'Em validação', validated: 'Validado',
+  pending_review: 'Pendente de revisão', approved: 'Aprovado', published: 'Publicado',
+  rejected: 'Rejeitado', duplicate: 'Duplicado', invalid: 'Inválido',
+};
+
+function renderAdminPanelLink(){
+  var el = document.getElementById('adminPanelLink');
+  if(!el) return;
+  if(window.KinEduSession && KinEduSession.isAdmin()){
+    el.innerHTML = '<a href="#admin-curation" onclick="SP(\'admin-curation\');return false;" ' +
+      'style="display:inline-flex;align-items:center;gap:8px;margin:0 0 20px;padding:10px 16px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--primary);font-weight:700;font-size:13px;text-decoration:none">' +
+      '🛡️ Painel de curadoria científica</a>';
+  } else {
+    el.innerHTML = '';
+  }
+}
+window.renderAdminPanelLink = renderAdminPanelLink;
+
+function adminEnter(){
+  var gate = document.getElementById('adminGate');
+  var content = document.getElementById('adminContent');
+  if(!window.KinEduAdminAPI || !window.KinEduSession || !KinEduSession.isAdmin()){
+    gate.style.display = ''; content.style.display = 'none';
+    document.getElementById('adminGateMsg').textContent = 'Esta área é restrita a administradores. Entre com uma conta autorizada para continuar.';
+    return;
+  }
+  // Sessão local diz "admin" — confirmar com o servidor (a sessão pode ter
+  // expirado, ou a conta pode ter perdido o privilégio desde o login).
+  KinEduAdminAPI.me().then(function(){
+    gate.style.display = 'none'; content.style.display = '';
+    adminLoadCandidates();
+  }).catch(function(err){
+    gate.style.display = ''; content.style.display = 'none';
+    document.getElementById('adminGateMsg').textContent = (err && err.status === 403)
+      ? 'Sua conta não tem permissão de administrador.'
+      : 'Sua sessão expirou. Entre novamente.';
+    if(err && (err.status === 401 || err.status === 403)) KinEduSession.clear();
+  });
+}
+window.adminEnter = adminEnter;
+
+function adminChecklistHTML(c){
+  var items = [];
+  if(c.doi) items.push(adminIsValidDoi(c.doi) ? ['ok','DOI verificado'] : ['warn','DOI em formato não reconhecido']);
+  else items.push(['warn','DOI não informado']);
+
+  if(c.pmid) items.push(adminIsValidPmid(c.pmid) ? ['ok','PMID verificado'] : ['warn','PMID em formato não reconhecido']);
+  else items.push(['warn','PMID não informado']);
+
+  var win = adminWithinTenYears(c.published_at);
+  if(win === true) items.push(['ok','Data dentro dos últimos 10 anos']);
+  else if(win === false) items.push(['warn','Fora da janela de 10 anos']);
+  else items.push(['warn','Data de publicação não informada']);
+
+  // Todo candidato existente já passou pela checagem de duplicidade no
+  // momento em que foi criado (backend/src/services/agent/curationService.js
+  // findDuplicate) — se está listado aqui, não foi sinalizado como duplicata.
+  items.push(c.status === 'duplicate' ? ['warn','Marcado como duplicado'] : ['ok','Não duplicado']);
+
+  items.push(c.source ? ['ok','Fonte identificada: ' + adminEscapeHtml(c.source)] : ['warn','Fonte não identificada']);
+
+  return items.map(function(it){
+    var icon = it[0]==='ok' ? '✓' : '⚠';
+    var cls = it[0]==='ok' ? 'admin-check-ok' : 'admin-check-warn';
+    return '<span class="admin-check ' + cls + '">' + icon + ' ' + it[1] + '</span>';
+  }).join('');
+}
+
+function adminField(label, value){
+  if(!value) return '';
+  return '<details class="admin-detail"><summary>' + adminEscapeHtml(label) + '</summary><p>' + adminEscapeHtml(value) + '</p></details>';
+}
+
+function adminRenderCard(c){
+  var title = c.title_pt || c.title;
+  var statusLabel = ADMIN_STATUS_LABELS[c.status] || c.status;
+  var tags = Array.isArray(c.tags) ? c.tags : [];
+
+  var metaBits = [];
+  if(c.authors) metaBits.push(adminEscapeHtml(c.authors));
+  if(c.journal) metaBits.push(adminEscapeHtml(c.journal));
+  if(c.published_at) metaBits.push(adminFmtDate(c.published_at));
+  if(c.doi) metaBits.push('DOI: ' + adminEscapeHtml(c.doi));
+  if(c.pmid) metaBits.push('PMID: ' + adminEscapeHtml(c.pmid));
+  if(c.study_type) metaBits.push(adminEscapeHtml(c.study_type));
+
+  var actions = '';
+  if(c.status === 'pending_review'){
+    actions = '<div class="admin-card-actions">' +
+      '<button class="admin-btn admin-btn-approve" onclick="adminApprove(\'' + c.id + '\')">✓ Aprovar</button>' +
+      '<button class="admin-btn admin-btn-reject" onclick="adminReject(\'' + c.id + '\')">✕ Rejeitar</button>' +
+      (c.doi ? '<a class="admin-btn admin-btn-secondary" href="https://doi.org/' + encodeURIComponent(c.doi) + '" target="_blank" rel="noopener">Ver artigo original ↗</a>' : '') +
+      '</div>';
+  } else {
+    var reviewNote = c.reviewed_at ? ('Revisado em ' + adminFmtDate(c.reviewed_at)) : '';
+    actions = '<div class="admin-card-actions admin-card-actions-readonly">' +
+      '<span class="admin-review-note">' + adminEscapeHtml(reviewNote) + '</span>' +
+      (c.rejection_reason ? '<span class="admin-rejection-reason">Motivo: ' + adminEscapeHtml(c.rejection_reason) + '</span>' : '') +
+      '</div>';
+  }
+
+  return '<div class="admin-card">' +
+    '<div class="admin-card-head">' +
+      '<span class="admin-status-badge admin-status-' + adminEscapeHtml(c.status) + '">' + adminEscapeHtml(statusLabel) + '</span>' +
+      (c.topic ? '<span class="admin-card-topic">' + adminEscapeHtml(c.topic) + '</span>' : '') +
+      (tags.length ? tags.map(function(t){ return '<span class="admin-card-tag">' + adminEscapeHtml(t) + '</span>'; }).join('') : '') +
+    '</div>' +
+    '<h3 class="admin-card-title">' + adminEscapeHtml(title) + '</h3>' +
+    (c.title_pt && c.title !== c.title_pt ? '<div class="admin-card-title-orig">' + adminEscapeHtml(c.title) + '</div>' : '') +
+    '<div class="admin-card-meta">' + metaBits.join(' · ') + '</div>' +
+    '<div class="admin-checklist">' + adminChecklistHTML(c) + '</div>' +
+    '<div class="admin-card-body">' +
+      adminField('Resumo', c.abstract) +
+      adminField('Resumo (PT)', c.summary_pt) +
+      adminField('Metodologia', c.methodology) +
+      adminField('População', c.population) +
+      adminField('Principais resultados', c.main_results) +
+      adminField('Conclusão', c.conclusion) +
+      adminField('Aplicação prática', c.practical_application) +
+      adminField('Limitações', c.limitations) +
+    '</div>' +
+    actions +
+  '</div>';
+}
+
+function adminLoadCandidates(){
+  var list = document.getElementById('adminList');
+  var summary = document.getElementById('adminSummary');
+  list.innerHTML = '<p class="admin-loading">Carregando…</p>';
+
+  var filters = {
+    status: document.getElementById('adminFilterStatus').value,
+    category: document.getElementById('adminFilterCategory').value.trim(),
+    study_type: document.getElementById('adminFilterStudyType').value,
+    year: document.getElementById('adminFilterYear').value,
+  };
+
+  KinEduAdminAPI.listCandidates(filters).then(function(result){
+    summary.textContent = result.total + ' candidato' + (result.total !== 1 ? 's' : '') + ' encontrado' + (result.total !== 1 ? 's' : '');
+    if(!result.candidates.length){
+      list.innerHTML = '<p class="admin-empty">Nenhum candidato encontrado para esses filtros.</p>';
+      return;
+    }
+    list.innerHTML = result.candidates.map(adminRenderCard).join('');
+  }).catch(function(err){
+    if(err && (err.status === 401 || err.status === 403)){ adminEnter(); return; }
+    list.innerHTML = '<p class="admin-empty">Não foi possível carregar os candidatos agora.</p>';
+  });
+}
+window.adminLoadCandidates = adminLoadCandidates;
+
+function adminApprove(id){
+  if(!confirm('Aprovar este candidato? Ele passará a contar como revisado e aprovado por um administrador.')) return;
+  KinEduAdminAPI.approve(id).then(function(){
+    adminLoadCandidates();
+  }).catch(function(err){
+    alert((err && err.data && err.data.message) || 'Não foi possível aprovar este candidato.');
+  });
+}
+window.adminApprove = adminApprove;
+
+function adminReject(id){
+  var reason = prompt('Motivo da rejeição (obrigatório):');
+  if(reason === null) return;
+  if(!reason.trim()){ alert('É necessário informar um motivo.'); return; }
+  KinEduAdminAPI.reject(id, reason.trim()).then(function(){
+    adminLoadCandidates();
+  }).catch(function(err){
+    alert((err && err.data && err.data.message) || 'Não foi possível rejeitar este candidato.');
+  });
+}
+window.adminReject = adminReject;
 
 })();
