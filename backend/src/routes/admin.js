@@ -2,14 +2,18 @@ import { Router } from 'express';
 import { requireAdminAuth } from '../admin/auth.js';
 import * as curationService from '../services/agent/curationService.js';
 import { logger } from '../utils/logger.js';
+import { createFixedWindowLimiter } from '../utils/rateLimiter.js';
 
 export const adminRouter = Router();
+
+const adminRateLimit = createFixedWindowLimiter({ windowMs: 60_000, maxRequests: 120, key: 'admin' });
 
 // Every /api/admin/* call requires a valid admin session — checked here
 // once so no individual route can forget. Completely separate middleware
 // from the agent's requireAgentAuth; there is no token format either side
-// accepts from the other.
-adminRouter.use(requireAdminAuth);
+// accepts from the other. Rate limit applied even though the caller is
+// already authenticated — bounds the blast radius of a leaked admin token.
+adminRouter.use(requireAdminAuth, adminRateLimit);
 
 adminRouter.get('/me', (req, res) => {
   res.json({ id: req.adminUser.id, email: req.adminUser.email, is_admin: true });

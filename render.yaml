@@ -1,0 +1,52 @@
+# Render Blueprint for KinEdu — deploys the single Express process that
+# serves the frontend, public API, Agent API, Admin API, and the /mcp
+# server together, plus a managed PostgreSQL database.
+#
+# This file describes the deploy; it does NOT deploy anything by itself.
+# See docs/deployment.md for the full manual walkthrough (Render Blueprints
+# still require you to connect the repo and click "Apply" in the dashboard
+# — nothing in this repo can do that step for you).
+#
+# Three env vars below are intentionally left for you to set by hand in
+# the Render dashboard after the first deploy (sync: false) rather than
+# generated or hardcoded here: KINEDU_AGENT_API_KEY, MCP_AUTH_SECRET, and
+# CORS_ORIGIN. The first two are real secrets that must never be committed;
+# CORS_ORIGIN needs the actual public URL Render assigns you, which isn't
+# known until after the first deploy.
+
+databases:
+  - name: kinedu-db
+    databaseName: kinedu
+    user: kinedu
+    plan: free # Verify current Render free-tier Postgres terms in the dashboard — they change over time.
+
+services:
+  - type: web
+    name: kinedu-backend
+    runtime: node
+    rootDir: backend
+    plan: free # Free web services on Render sleep after inactivity (cold start on the next request).
+                # An MCP connector expecting a prompt response may not tolerate that — see docs/deployment.md
+                # for when to switch to a paid always-on plan.
+    branch: claude/static-site-preview-8csdsv # Update to whatever branch you actually want to deploy from (e.g. main after merging).
+    buildCommand: npm install
+    startCommand: npm start
+    preDeployCommand: npm run migrate
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kinedu-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: BCRYPT_ROUNDS
+        value: "12"
+      - key: KINEDU_AGENT_API_KEY
+        sync: false
+      - key: MCP_AUTH_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false

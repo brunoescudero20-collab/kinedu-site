@@ -2,7 +2,17 @@
 // Every call here is meant to be additive: if the backend is unreachable,
 // callers catch the rejection and fall back to the static content that was
 // already in index.html, so the page never breaks because of this file.
-const KINEDU_API_BASE = window.KINEDU_API_BASE || 'http://localhost:3001/api';
+//
+// Base URL: defaults to a same-origin relative "/api", which is correct
+// whenever the backend serves the frontend itself (production — see
+// docs/deployment.md — and also `node backend/src/server.js` alone on
+// :3001 in local dev). The one case that needs an absolute override is
+// this repo's split local-dev setup (python -m http.server 8080 for the
+// frontend + the backend separately on :3001, two different origins) —
+// detected here by the known dev port rather than hardcoded permanently,
+// so the same file is correct in both places without manual editing.
+const KINEDU_API_BASE = window.KINEDU_API_BASE
+  || (location.port === '8080' ? 'http://localhost:3001/api' : '/api');
 
 async function apiFetch(path, opts) {
   opts = opts || {};

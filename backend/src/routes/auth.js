@@ -3,8 +3,17 @@ import bcrypt from 'bcrypt';
 import { pool } from '../db/pool.js';
 import { env } from '../config/env.js';
 import { signSession } from '../admin/session.js';
+import { createFixedWindowLimiter } from '../utils/rateLimiter.js';
 
 export const authRouter = Router();
+
+// Public, unauthenticated, credential-guessing surface — tighter budget
+// than the authenticated agent/admin/MCP surfaces (120/min elsewhere).
+// Keyed globally per process, same documented limitation as the other
+// limiters (backend/src/utils/rateLimiter.js): fine for a single instance,
+// would need a shared store to coordinate across more than one.
+const authRateLimit = createFixedWindowLimiter({ windowMs: 60_000, maxRequests: 20, key: 'auth' });
+authRouter.use(authRateLimit);
 
 // Backs the login/senha form already built in the frontend (p-auth in
 // index.html). Login issues a signed session token (12h) — needed once the

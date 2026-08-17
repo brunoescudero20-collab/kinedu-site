@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
 import { articlesRouter } from './routes/articles.js';
@@ -27,6 +29,21 @@ app.use((req, res, next) => {
 });
 
 app.get('/api/health', (req, res) => res.json({ ok: true, env: env.nodeEnv }));
+
+// ── Static frontend (production single-process hosting) ──────────────
+// Deliberately NOT `express.static(repoRoot)` — that would also serve
+// everything under backend/ (source files, package.json, node_modules) to
+// any visitor who guesses the path. Only these four files, by exact name,
+// are ever the frontend: same set the GitHub Pages workflow deploys, same
+// set api.js/script.js were built against. Local split-server dev
+// (python -m http.server 8080 + this backend on 3001) is untouched — this
+// is an additional way to serve the frontend, not a replacement.
+const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const FRONTEND_FILES = ['index.html', 'styles.css', 'script.js', 'api.js'];
+for (const file of FRONTEND_FILES) {
+  app.get('/' + file, (req, res) => res.sendFile(path.join(REPO_ROOT, file)));
+}
+app.get('/', (req, res) => res.sendFile(path.join(REPO_ROOT, 'index.html')));
 
 app.use('/api/articles', articlesRouter);
 app.use('/api/categories', categoriesRouter);
