@@ -25,4 +25,10 @@ export const env = {
   // a warning). Set SESSION_SECRET for tokens that survive a restart.
   sessionSecret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
   sessionSecretIsEphemeral: !process.env.SESSION_SECRET,
+  // Separate credential from KINEDU_AGENT_API_KEY on purpose — the MCP
+  // endpoint is a different network-facing surface (meant for a remote
+  // Claude/Cowork connector) than direct Agent API calls. If one leaks, the
+  // other still doesn't. Optional: /mcp responds 503 instead of crashing
+  // the server when unset.
+  mcpAuthSecret: process.env.MCP_AUTH_SECRET || null,
 };
