@@ -4,7 +4,7 @@
   "description": "KinEdu API — Phase 1 infrastructure (articles, categories, search, analytics)",
   "main": "src/server.js",
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test",
     "start": "node src/server.js",
     "migrate": "node src/db/migrate.js",
     "seed": "node src/db/seed/migrate-articles.js"

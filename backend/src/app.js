@@ -8,6 +8,7 @@ import { searchRouter } from './routes/search.js';
 import { analyticsRouter } from './routes/analytics.js';
 import { statsRouter } from './routes/stats.js';
 import { authRouter } from './routes/auth.js';
+import { agentRouter } from './routes/agent.js';
 import { notFoundHandler, errorHandler } from './middleware/errorHandler.js';
 
 export const app = express();
@@ -31,6 +32,7 @@ app.use('/api/search', searchRouter);
 app.use('/api/analytics', analyticsRouter);
 app.use('/api/stats', statsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/agent', agentRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
