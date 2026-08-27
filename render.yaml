@@ -31,7 +31,14 @@ services:
     branch: claude/static-site-preview-8csdsv # Update to whatever branch you actually want to deploy from (e.g. main after merging).
     buildCommand: npm install
     startCommand: npm start
-    preDeployCommand: npm run migrate
+    # No preDeployCommand: Render doesn't support it on the free plan
+    # (confirmed against the actual dashboard, not assumed) — this migration
+    # step became manual because of that constraint, not by choice. Run
+    # `npm run migrate` once yourself via the Shell tab after the first
+    # deploy (see docs/deployment.md step 11), and again after any future
+    # deploy that adds a new migration file. If you upgrade this service to
+    # a paid plan, preDeployCommand: npm run migrate becomes available and
+    # automates this.
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV

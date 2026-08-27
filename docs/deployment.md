@@ -78,7 +78,7 @@ Comparado com Railway e Fly.io nos critérios pedidos:
 ## 6. Arquivo de configuração criado
 
 `render.yaml` (raiz do repositório) — Render Blueprint com:
-- `services.kinedu-backend`: `rootDir: backend`, `buildCommand: npm install`, `startCommand: npm start`, `preDeployCommand: npm run migrate` (roda as migrations automaticamente antes de cada deploy), `healthCheckPath: /api/health`.
+- `services.kinedu-backend`: `rootDir: backend`, `buildCommand: npm install`, `startCommand: npm start`, `healthCheckPath: /api/health`. **Sem `preDeployCommand`** — confirmado ao vivo no dashboard do Render que esse recurso não está disponível no plano `free`; migrations precisam ser rodadas manualmente (ver item 11 abaixo). Se o serviço for movido para um plano pago, `preDeployCommand: npm run migrate` volta a ser uma opção e automatiza esse passo.
 - `databases.kinedu-db`: Postgres gerenciado, conectado automaticamente via `DATABASE_URL`.
 - `SESSION_SECRET`: gerado automaticamente pelo Render (`generateValue: true`).
 - `KINEDU_AGENT_API_KEY`, `MCP_AUTH_SECRET`, `CORS_ORIGIN`: marcados `sync: false` — você define manualmente no dashboard depois do primeiro deploy (os dois primeiros porque são segredos reais que nunca devem estar neste arquivo; o terceiro porque a URL pública só existe depois do primeiro deploy).
@@ -97,7 +97,7 @@ Não foram criados arquivos para Railway ou Fly.io — só a plataforma escolhid
 8. **KINEDU_AGENT_API_KEY**: gere um valor novo (comando acima) e cole no dashboard do Render, na aba Environment do serviço `kinedu-backend`.
 9. **MCP_AUTH_SECRET**: gere outro valor novo e diferente do anterior, cole na mesma aba.
 10. **NODE_ENV**: já definido como `production` no `render.yaml`.
-11. **Executar migrations**: automático via `preDeployCommand: npm run migrate` a cada deploy. Se preferir rodar manualmente na primeira vez, use o Shell do Render (aba "Shell" do serviço) e rode `npm run migrate`.
+11. **Executar migrations**: manual — o plano `free` do Render não suporta `preDeployCommand`. Depois que o primeiro deploy terminar (o serviço vai subir sem tabela nenhuma criada ainda), abra a aba **"Shell"** do serviço `kinedu-backend` no dashboard e rode `npm run migrate`. Repita esse passo depois de qualquer deploy futuro que adicione um novo arquivo de migration.
 12. **Verificar health check**: `curl https://<sua-url>.onrender.com/api/health` → esperado `{"ok":true,"env":"production"}`.
 13. **Verificar /mcp**: `curl https://<sua-url>.onrender.com/mcp/health` → esperado `{"ok":true,"database_connected":true,"mcp_configured":true,...}`.
 14. **Testar Agent API**: `curl https://<sua-url>.onrender.com/api/agent/categories -H "Authorization: Bearer <KINEDU_AGENT_API_KEY real>"` → deve retornar as categorias reais.
