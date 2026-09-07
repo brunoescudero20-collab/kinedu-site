@@ -34,8 +34,8 @@ app.get('/api/health', (req, res) => res.json({ ok: true, env: env.nodeEnv }));
 // Deliberately NOT `express.static(repoRoot)` — that would also serve
 // everything under backend/ (source files, package.json, node_modules) to
 // any visitor who guesses the path. Only these four files, by exact name,
-// are ever the frontend: same set the GitHub Pages workflow deploys, same
-// set api.js/script.js were built against. Local split-server dev
+// are ever the frontend — the same set api.js/script.js were built
+// against, and the same set Vercel serves. Local split-server dev
 // (python -m http.server 8080 + this backend on 3001) is untouched — this
 // is an additional way to serve the frontend, not a replacement.
 const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
