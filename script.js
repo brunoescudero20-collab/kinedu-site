@@ -1,17 +1,106 @@
 function SP(k){
-  ['home','article','category','path','library','glossary','profile','search','art1','art2','art3','art4','art5'].forEach(function(p){
+  ['landing','home','article','category','categories','category-soon','path','library','glossary','profile','auth','search','calculator','art1','art2','art3','art4','art5','admin-curation'].forEach(function(p){
     var e=document.getElementById('p-'+p); if(e) e.style.display='none';
   });
   var pg=document.getElementById('p-'+k);
-  if(pg) pg.style.display='block';
+  if(pg){
+    pg.style.display='block';
+    pg.classList.remove('kp-anim');
+    void pg.offsetWidth;
+    pg.classList.add('kp-anim');
+  }
   window.scrollTo(0,0);
   try{history.pushState({p:k},'','#'+k);}catch(e){}
-  var m={category:'Categorias',path:'Trilhas',library:'Pesquisa',glossary:'Glossário',article:'Artigos'};
+  var m={categories:'Categorias',path:'Trilhas',library:'Pesquisa',glossary:'Glossário',article:'Artigos'};
   document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');if(m[k]&&a.textContent.trim()===m[k])a.classList.add('active');});
-  if(k==='profile'){try{buildHeatmap();}catch(e){}}
+  if(k==='profile'){try{buildHeatmap();}catch(e){}try{renderAdminPanelLink();}catch(e){}}
+  if(k==='admin-curation'){try{adminEnter();}catch(e){}}
+  // Log a real article view — fire-and-forget, never blocks the page switch above.
+  if(/^art\d+$/.test(k) && window.KinEduAPI){
+    KinEduAPI.getArticle(k).then(function(a){ return KinEduAPI.logArticleView(a.id); }).catch(function(){});
+  }
+}
+
+// ── REAL DATA HYDRATION ──
+// Replaces the hardcoded placeholder numbers in the static HTML with real
+// counts from the backend once they're available. If the API is unreachable
+// the static numbers already in index.html stay exactly as they were.
+(function(){
+  if(!window.KinEduAPI) return;
+
+  KinEduAPI.getStats().then(function(stats){
+    var el = document.getElementById('statTotalArticles');
+    if(el) el.textContent = String(stats.total_articles);
+  }).catch(function(){});
+
+  KinEduAPI.getCategories().then(function(cats){
+    var bySlug = {};
+    cats.forEach(function(c){ bySlug[c.slug] = c.article_count; });
+    document.querySelectorAll('[data-cat-count]').forEach(function(el){
+      var slug = el.getAttribute('data-cat-count');
+      if(Object.prototype.hasOwnProperty.call(bySlug, slug)) el.textContent = String(bySlug[slug]);
+    });
+  }).catch(function(){});
+})();
+function SPCategorySoon(name){
+  var el=document.getElementById('categorySoonName');
+  if(el) el.textContent=name;
+  SP('category-soon');
+}
+
+function setAuthMode(mode){
+  document.querySelectorAll('[data-auth-mode]').forEach(function(b){
+    b.setAttribute('aria-pressed', b.dataset.authMode===mode ? 'true':'false');
+  });
+  var isLogin = mode==='login';
+  document.getElementById('authTitle').textContent = isLogin ? 'Entrar na sua conta' : 'Criar sua conta';
+  document.getElementById('authSub').textContent = isLogin ? 'Informe seu login e senha para continuar.' : 'Escolha um login e uma senha — é só isso que pedimos.';
+  document.getElementById('authSubmitBtn').textContent = isLogin ? 'Entrar' : 'Criar conta';
+  document.getElementById('authPassword').setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
+}
+function SPAuth(mode){
+  setAuthMode(mode || 'login');
+  SP('auth');
+}
+function submitAuth(e){
+  e.preventDefault();
+  var errEl = document.getElementById('authError');
+  var showErr = function(msg){ if(errEl){ errEl.textContent = msg; errEl.className = 'calc-field-err visible'; } };
+  if(errEl){ errEl.className = 'calc-field-err'; errEl.textContent=''; }
+
+  if(!window.KinEduAPI){ SP('profile'); return false; }
+
+  var login = document.getElementById('authLogin').value.trim();
+  var password = document.getElementById('authPassword').value;
+  var isLogin = document.querySelector('[data-auth-mode="login"]').getAttribute('aria-pressed') === 'true';
+  var btn = document.getElementById('authSubmitBtn');
+  var original = btn.textContent;
+  btn.textContent = isLogin ? 'Entrando…' : 'Criando conta…';
+  btn.disabled = true;
+
+  var req = isLogin ? KinEduAPI.login(login, password) : KinEduAPI.signup(login, password);
+  req.then(function(){
+    SP('profile');
+  }).catch(function(err){
+    showErr((err && err.data && err.data.message) || 'Não foi possível concluir. Tente novamente.');
+  }).finally(function(){
+    btn.textContent = original;
+    btn.disabled = false;
+  });
+  return false;
 }
 window.addEventListener('popstate',function(e){if(e.state&&e.state.p)SP(e.state.p);});
-document.addEventListener('DOMContentLoaded',function(){SP((location.hash||'#home').replace('#',''));});
+document.addEventListener('DOMContentLoaded',function(){SP((location.hash||'#landing').replace('#',''));});
+
+// landing search bar
+function landingSearch(e){
+  if(e) e.preventDefault();
+  var q=document.getElementById('ldSearch').value.trim();
+  if(!q) return false;
+  SP('search');
+  quickSearch(q);
+  return false;
+}
 
 // article
 // Reading progress
@@ -257,32 +346,73 @@ function setTab(btn, type) {
   });
 }
 
+// Builds a .res-card for a real article returned by GET /api/search — same
+// markup/classes the static demo cards used, just filled with real fields
+// instead of invented ones (no fabricated difficulty level or read time
+// when the article doesn't have one).
+function buildArticleResultCard(a) {
+  const title = a.title_pt || a.title;
+  const dateStr = a.published_at ? new Date(a.published_at).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }) : '';
+  const metaBits = [`<span class="res-type-badge rtb-article">Artigo</span>`];
+  if (a.category_name) metaBits.push(`<span class="res-cat">${a.category_name}</span>`);
+  if (a.category_name && dateStr) metaBits.push(`<span class="res-dot"></span>`);
+  if (dateStr) metaBits.push(`<span class="res-date">${dateStr}</span>`);
+  const footerBits = [];
+  if (a.category_name) footerBits.push(`<span class="res-tag">${a.category_name}</span>`);
+  if (a.reading_time_minutes) footerBits.push(`<span class="res-read-time">${a.reading_time_minutes} min</span>`);
+  return `<a class="res-card" href="#${a.slug}" onclick="SP('${a.slug}');return false;">
+    <div class="res-card-top">
+      <span class="res-card-icon">📄</span>
+      <div style="flex:1;min-width:0">
+        <div class="res-card-meta">${metaBits.join('')}</div>
+        <div class="res-title">${title}</div>
+        <div class="res-excerpt">${a.excerpt || ''}</div>
+        <div class="res-footer">${footerBits.join('')}</div>
+      </div>
+    </div>
+  </a>`;
+}
+
+function renderRealSearchResults(q, results) {
+  const list = document.querySelector('#sec-articles .result-list');
+  const countEl = document.querySelector('#sec-articles .rs-count');
+  const badge = document.querySelector('.results-count-badge');
+  if (list) list.innerHTML = results.length
+    ? results.map(buildArticleResultCard).join('')
+    : `<p style="padding:8px 0;color:var(--text-muted,#888)">Nenhum artigo encontrado para "${q}".</p>`;
+  if (countEl) countEl.textContent = `${results.length} resultado${results.length !== 1 ? 's' : ''}`;
+  if (badge) badge.textContent = String(results.length);
+
+  if (results.length === 0) {
+    document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = 'none');
+    document.getElementById('noResults').classList.add('visible');
+  } else {
+    document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = '');
+    document.getElementById('noResults').classList.remove('visible');
+  }
+}
+
 function doSearch() {
   const q = document.getElementById('heroSearch').value.trim();
   if (!q) return;
   currentQuery = q;
   document.querySelector('.results-query').innerHTML = `Resultados para <strong>"${q}"</strong>`;
   document.getElementById('navSearch').value = q;
-  // Simulate: if no match, show empty state
-  if (q.length > 0 && !['hipertrofia','fisiologia','força','periodização','nutrição','mtor','treino','músculo','proteína','vo2','volume','amplitude'].some(k => q.toLowerCase().includes(k))) {
-    document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = 'none');
-    document.getElementById('noResults').classList.add('visible');
-    document.querySelector('.results-count-badge').textContent = '0';
-  } else {
-    document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = '');
-    document.getElementById('noResults').classList.remove('visible');
-    document.querySelector('.results-count-badge').textContent = '23';
-  }
+
+  if (!window.KinEduAPI) return;
+  KinEduAPI.logSearch(q);
+  KinEduAPI.search(q).then(data => {
+    renderRealSearchResults(q, data.articles || []);
+  }).catch(() => {
+    renderRealSearchResults(q, []);
+  });
 }
 
 function quickSearch(q) {
   document.getElementById('heroSearch').value = q;
   document.getElementById('navSearch').value = q;
-  doSearch();
-  document.getElementById('noResults').classList.remove('visible');
-  document.querySelectorAll('.result-section, .section-divider, .popular-section').forEach(el => el.style.display = '');
-  document.querySelector('.results-count-badge').textContent = '23';
   document.querySelector('.results-query').innerHTML = `Resultados para <strong>"${q}"</strong>`;
+  doSearch();
 }
 
 // Nav search sync
@@ -319,3 +449,695 @@ document.querySelectorAll('.recent-remove').forEach(btn => {
     setTimeout(() => this.closest('.recent-item').remove(), 200);
   });
 });
+
+// ── CALCULADORA 5/3/1 ──
+(function(){
+
+  var CALC_STORAGE_KEY = 'kinedu_calc531_v1';
+  var CALC_LIFT_KEYS = ['squat','bench','deadlift','press'];
+  var CALC_PLATE_SET = { kg: [25,20,15,10,5,2.5,1.25], lb: [45,35,25,10,5,2.5] };
+  var CALC_MIN_REPS = {1:5, 2:3, 3:1};
+
+  var CALC_WEEKS = [
+    { key:1, label:'Semana 1', amrapWeek:true, sets:[
+        {pct:.65, reps:'5'}, {pct:.75, reps:'5'}, {pct:.85, reps:'5+', amrap:true}
+      ]},
+    { key:2, label:'Semana 2', amrapWeek:true, sets:[
+        {pct:.70, reps:'3'}, {pct:.80, reps:'3'}, {pct:.90, reps:'3+', amrap:true}
+      ]},
+    { key:3, label:'Semana 3', amrapWeek:true, sets:[
+        {pct:.75, reps:'5'}, {pct:.85, reps:'3'}, {pct:.95, reps:'1+', amrap:true}
+      ]},
+    { key:4, label:'Semana 4 (Deload)', amrapWeek:false, sets:[
+        {pct:.40, reps:'5'}, {pct:.50, reps:'5'}, {pct:.60, reps:'5'}
+      ]}
+  ];
+
+  var calcCfg = { unit:'kg', tmBase:0.90, inc:2.5, barWeight:20, showPlates:false };
+  var calcLiftState = {};
+  CALC_LIFT_KEYS.forEach(function(k){ calcLiftState[k] = { mode:'set', oneRM:'', weight:'', reps:'' }; });
+
+  var calcLastResults = {};
+  var calcLastExampleFlags = {};
+
+  // ── math ──
+  function calcEpley(weight, reps){
+    reps = Math.round(reps);
+    if (reps <= 1) return weight;
+    return weight * (1 + reps / 30);
+  }
+
+  // arredonda x para o múltiplo mais próximo de inc; empate exato arredonda para baixo
+  function calcRound(x, inc){
+    if (!inc) inc = 1;
+    var n = x / inc;
+    var floor = Math.floor(n + 1e-9);
+    var frac = n - floor;
+    var rounded = (Math.abs(frac - 0.5) < 1e-7) ? floor : Math.round(n);
+    return Math.round(rounded * inc * 1000) / 1000;
+  }
+
+  function calcLoad(tm, pct, inc){ return calcRound(tm * pct, inc); }
+
+  function calcFmt(x){
+    var r = Math.round(x * 100) / 100;
+    if (Object.is(r, -0)) r = 0;
+    return String(r).replace('.', ',');
+  }
+
+  function calcPlates(load, barWeight, unit){
+    var perSide = (load - barWeight) / 2;
+    if (perSide < -0.001) return { belowBar:true, plates:[] };
+    var plateSet = CALC_PLATE_SET[unit] || CALC_PLATE_SET.kg;
+    var remaining = Math.round(perSide * 100) / 100;
+    var used = [];
+    for (var i = 0; i < plateSet.length; i++){
+      var p = plateSet[i];
+      while (remaining + 0.001 >= p){
+        used.push(p);
+        remaining = Math.round((remaining - p) * 100) / 100;
+      }
+    }
+    return { belowBar:false, plates:used, remainder:remaining };
+  }
+
+  function calcPlatesText(pl, unit){
+    if (pl.belowBar) return 'abaixo do peso da barra';
+    if (!pl.plates.length) return 'só a barra, sem anilhas';
+    return pl.plates.map(calcFmt).join(' + ') + ' ' + unit + '/lado';
+  }
+
+  function calcLiftResult(oneRM, cfg, cycleInc){
+    var tm = calcRound(oneRM * cfg.tmBase, cfg.inc);
+    var weeks = CALC_WEEKS.map(function(w){
+      return {
+        key: w.key, label: w.label, amrapWeek: w.amrapWeek,
+        sets: w.sets.map(function(s){
+          var load = calcLoad(tm, s.pct, cfg.inc);
+          var realPct = oneRM > 0 ? (load / oneRM * 100) : 0;
+          return { pct:s.pct, reps:s.reps, amrap: !!s.amrap, load:load, realPct:realPct };
+        })
+      };
+    });
+    return { oneRM:oneRM, tm:tm, cycleInc:cycleInc, weeks:weeks };
+  }
+
+  // ── debounce ──
+  function calcDebounce(fn, delay){
+    var t;
+    return function(){
+      var args = arguments, ctx = this;
+      clearTimeout(t);
+      t = setTimeout(function(){ fn.apply(ctx, args); }, delay);
+    };
+  }
+
+  // ── storage ──
+  function calcLoadStorage(){
+    try {
+      var raw = localStorage.getItem(CALC_STORAGE_KEY);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      if (data.cfg) { for (var k in data.cfg) { calcCfg[k] = data.cfg[k]; } }
+      if (data.lifts) { CALC_LIFT_KEYS.forEach(function(lk){ if (data.lifts[lk]) { for (var f in data.lifts[lk]) { calcLiftState[lk][f] = data.lifts[lk][f]; } } }); }
+    } catch(e){}
+  }
+  function calcSaveStorage(){
+    try { localStorage.setItem(CALC_STORAGE_KEY, JSON.stringify({ cfg:calcCfg, lifts:calcLiftState })); } catch(e){}
+  }
+
+  // ── validation ──
+  function calcSetErr(fieldId, mode, text){
+    var el = document.querySelector('[data-err-for="' + fieldId + '"]');
+    if (!el) return;
+    if (mode === 'err') { el.textContent = text; el.className = 'calc-field-err visible'; }
+    else if (mode === 'warn') { el.textContent = text; el.className = 'calc-field-warn visible'; }
+    else { el.className = 'calc-field-err'; }
+  }
+
+  function calcCheckWeight(fieldId, val){
+    if (val === '' || val === null || typeof val === 'undefined') { calcSetErr(fieldId, 'none'); return { valid:false, empty:true }; }
+    var n = Number(val);
+    if (isNaN(n) || n <= 0) { calcSetErr(fieldId, 'err', 'Informe um peso maior que zero.'); return { valid:false }; }
+    calcSetErr(fieldId, 'none');
+    return { valid:true, value:n };
+  }
+
+  function calcCheckReps(fieldId, val){
+    if (val === '' || val === null || typeof val === 'undefined') { calcSetErr(fieldId, 'none'); return { valid:false, empty:true }; }
+    var n = Number(val);
+    if (isNaN(n) || n < 1) { calcSetErr(fieldId, 'err', 'Informe pelo menos 1 repetição.'); return { valid:false }; }
+    if (n > 12) { calcSetErr(fieldId, 'warn', 'Acima de 12 repetições, a estimativa de 1RM perde confiabilidade.'); return { valid:true, reps:n }; }
+    calcSetErr(fieldId, 'none');
+    return { valid:true, reps:n };
+  }
+
+  // ── render ──
+  function calcRenderResultHTML(resultsEl, result, cfg, liftLabel){
+    var unit = cfg.unit;
+    var html = '<div class="calc-table-wrap"><table class="calc-table"><caption class="sr-only">Cargas do ciclo de ' + liftLabel + '</caption>' +
+      '<thead><tr><th scope="col">Semana</th><th scope="col">Série 1</th><th scope="col">Série 2</th><th scope="col">Série 3</th></tr></thead><tbody>';
+
+    result.weeks.forEach(function(w){
+      html += '<tr><th scope="row" style="font-weight:600;color:var(--text);white-space:nowrap">' + w.label + '</th>';
+      w.sets.forEach(function(s, si){
+        html += '<td class="' + (s.amrap ? 'calc-set-amrap' : '') + '" data-label="Série ' + (si + 1) + '">' + calcFmt(s.load) + ' ' + unit + ' × ' + s.reps + ' rep';
+        if (cfg.showPlates){
+          var pl = calcPlates(s.load, cfg.barWeight, unit);
+          html += '<span class="calc-plates-note">' + calcPlatesText(pl, unit) + '</span>';
+        }
+        html += '</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+
+    html += '<div class="calc-tm-line">Training Max: <strong>' + calcFmt(result.tm) + ' ' + unit + '</strong> · 1RM usado: <strong>' + calcFmt(result.oneRM) + ' ' + unit + '</strong></div>';
+
+    var amrapWeeks = result.weeks.filter(function(w){ return w.amrapWeek; });
+    var pctParts = amrapWeeks.map(function(w, i){
+      var amrapSet = w.sets[w.sets.length - 1];
+      var pctStr = amrapSet.realPct.toFixed(1).replace('.', ',').replace(/,0$/, '');
+      return 'Semana ' + (i + 1) + ': ' + pctStr + '%';
+    });
+    html += '<div class="calc-tm-line">% real do 1RM na série AMRAP — ' + pctParts.join(' · ') + '</div>';
+
+    var bbb50 = calcLoad(result.tm, 0.50, cfg.inc);
+    var bbb60 = calcLoad(result.tm, 0.60, cfg.inc);
+    html += '<div class="calc-bbb"><div class="calc-bbb-title">Boring But Big — 5×10</div>' +
+      '<div class="calc-bbb-row"><span>50%: <strong>' + calcFmt(bbb50) + ' ' + unit + ' × 10 rep</strong></span><span>60%: <strong>' + calcFmt(bbb60) + ' ' + unit + ' × 10 rep</strong></span></div>' +
+      '<p class="calc-bbb-note">5 séries de 10 com carga leve, entre 50% e 60% do Training Max. Não é a série pesada repetida cinco vezes.</p></div>';
+
+    resultsEl.innerHTML = html;
+  }
+
+  function calcRenderLift(liftKey){
+    var liftEl = document.querySelector('.calc-lift[data-lift="' + liftKey + '"]');
+    if (!liftEl) return;
+    var state = calcLiftState[liftKey];
+    var resultsEl = liftEl.querySelector('[data-results]');
+    var tagEl = liftEl.querySelector('[data-example-tag]');
+    var cincKg = parseFloat(liftEl.dataset.cincKg);
+    var cincLb = parseFloat(liftEl.dataset.cincLb);
+    var cycleInc = calcCfg.unit === 'kg' ? cincKg : cincLb;
+
+    var oneRM = null;
+
+    if (state.mode === '1rm'){
+      var r = calcCheckWeight('calc-' + liftKey + '-1rm', state.oneRM);
+      calcSetErr('calc-' + liftKey + '-weight', 'none');
+      calcSetErr('calc-' + liftKey + '-reps', 'none');
+      if (r.valid) oneRM = r.value;
+    } else {
+      var rw = calcCheckWeight('calc-' + liftKey + '-weight', state.weight);
+      var rr = calcCheckReps('calc-' + liftKey + '-reps', state.reps);
+      calcSetErr('calc-' + liftKey + '-1rm', 'none');
+      if (rw.valid && rr.valid && rr.reps) oneRM = calcEpley(rw.value, rr.reps);
+    }
+
+    var isExample = false;
+    if (oneRM === null){
+      if (liftKey === 'squat'){
+        oneRM = 140;
+        isExample = true;
+      } else {
+        resultsEl.innerHTML = '<p class="calc-empty-msg">Preencha seu 1RM ou seu melhor set acima para ver sua planilha.</p>';
+        if (tagEl) tagEl.hidden = true;
+        calcLastResults[liftKey] = null;
+        calcLastExampleFlags[liftKey] = false;
+        return;
+      }
+    }
+
+    if (tagEl) tagEl.hidden = !isExample;
+
+    var result = calcLiftResult(oneRM, calcCfg, cycleInc);
+    calcRenderResultHTML(resultsEl, result, calcCfg, liftEl.querySelector('.calc-lift-name').textContent);
+    calcLastResults[liftKey] = result;
+    calcLastExampleFlags[liftKey] = isExample;
+  }
+
+  function calcCrossCheck(){
+    var old = document.getElementById('calcCrossAlert');
+    if (old) old.remove();
+    var squat = calcLastResults.squat, press = calcLastResults.press;
+    if (squat && press && !calcLastExampleFlags.squat && !calcLastExampleFlags.press){
+      if (press.oneRM >= squat.oneRM){
+        var pressEl = document.querySelector('.calc-lift[data-lift="press"] [data-results]');
+        var div = document.createElement('div');
+        div.id = 'calcCrossAlert';
+        div.className = 'calc-alert';
+        div.textContent = 'Isso é incomum: seu desenvolvimento militar aparenta ser igual ou maior que seu agachamento. Confira os valores informados.';
+        pressEl.appendChild(div);
+      }
+    }
+  }
+
+  function calcRenderProjection(){
+    var table = document.getElementById('calcProjTable');
+    var note = document.getElementById('calcProjNote');
+    var rows = [];
+
+    CALC_LIFT_KEYS.forEach(function(k){
+      var r = calcLastResults[k];
+      if (!r) return;
+      var liftEl = document.querySelector('.calc-lift[data-lift="' + k + '"]');
+      var label = liftEl.querySelector('.calc-lift-name').textContent + (calcLastExampleFlags[k] ? ' (exemplo)' : '');
+      var cycles = [];
+      var tm = r.tm;
+      for (var c = 1; c <= 4; c++){
+        tm = (c === 1) ? r.tm : calcRound(tm + r.cycleInc, calcCfg.inc);
+        var heaviest = calcLoad(tm, 0.95, calcCfg.inc);
+        cycles.push({ cycle:c, tm:tm, heaviest:heaviest });
+      }
+      rows.push({ label:label, cycles:cycles });
+    });
+
+    if (!rows.length){
+      table.innerHTML = '';
+      note.textContent = 'Preencha ao menos um levantamento acima para ver a projeção.';
+      return;
+    }
+
+    var html = '<caption class="sr-only">Projeção do Training Max e da carga mais pesada por ciclo</caption>' +
+      '<thead><tr><th scope="col">Levantamento</th><th scope="col">Ciclo 1</th><th scope="col">Ciclo 2</th><th scope="col">Ciclo 3</th><th scope="col">Ciclo 4</th></tr></thead><tbody>';
+    rows.forEach(function(row){
+      html += '<tr><th scope="row" style="font-weight:600;color:var(--text)">' + row.label + '</th>';
+      row.cycles.forEach(function(c){
+        html += '<td data-label="Ciclo ' + c.cycle + '">TM ' + calcFmt(c.tm) + ' ' + calcCfg.unit + '<span class="calc-plates-note">topo ' + calcFmt(c.heaviest) + ' ' + calcCfg.unit + '</span></td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody>';
+    table.innerHTML = html;
+    note.textContent = 'O Training Max cresce a cada ciclo até se aproximar do seu 1RM inicial — é assim que o programa garante progressão sustentável em vez de estagnação.';
+  }
+
+  function calcBuildExportText(){
+    var lines = ['CALCULADORA 5/3/1 — KinEdu', ''];
+    CALC_LIFT_KEYS.forEach(function(k){
+      var res = calcLastResults[k];
+      if (!res) return;
+      var liftEl = document.querySelector('.calc-lift[data-lift="' + k + '"]');
+      var label = liftEl.querySelector('.calc-lift-name').textContent + (calcLastExampleFlags[k] ? ' (exemplo)' : '');
+      lines.push(label + ' — TM: ' + calcFmt(res.tm) + ' ' + calcCfg.unit + ' (1RM: ' + calcFmt(res.oneRM) + ' ' + calcCfg.unit + ')');
+      res.weeks.forEach(function(w){
+        var parts = w.sets.map(function(s){ return calcFmt(s.load) + calcCfg.unit + ' x' + s.reps + ' rep'; });
+        lines.push('  ' + w.label + ': ' + parts.join(', '));
+      });
+      lines.push('');
+    });
+    return lines.join('\n');
+  }
+
+  function calcRenderReverse(){
+    var week = parseInt(document.getElementById('calcRevWeek').value, 10);
+    var weightVal = document.getElementById('calcRevWeight').value;
+    var repsVal = document.getElementById('calcRevReps').value;
+    var resultEl = document.getElementById('calcRevResult');
+
+    if (weightVal === '' || repsVal === ''){
+      resultEl.innerHTML = 'Preencha os campos acima para ver a leitura do seu AMRAP.';
+      return;
+    }
+    var weight = Number(weightVal), reps = Number(repsVal);
+    if (isNaN(weight) || weight <= 0 || isNaN(reps) || reps < 1){
+      resultEl.innerHTML = 'Informe um peso maior que zero e pelo menos 1 repetição.';
+      return;
+    }
+
+    var e1rm = calcEpley(weight, reps);
+    var minReps = CALC_MIN_REPS[week];
+    var msg;
+    if (reps < minReps){
+      msg = 'Você fez ' + reps + ' repetições, abaixo do mínimo de ' + minReps + ' para a semana ' + week + '. Considere um reset do Training Max (multiplique por 0,90).';
+    } else if (reps >= minReps + 7){
+      msg = 'Você fez bem mais que o mínimo esperado (' + minReps + '). Seu Training Max provavelmente está conservador — considere aumentá-lo no próximo ciclo.';
+    } else {
+      msg = 'Resultado dentro do esperado para a calibração atual do seu Training Max.';
+    }
+    resultEl.innerHTML = '1RM estimado (Epley): <strong>' + calcFmt(e1rm) + ' ' + calcCfg.unit + '</strong><br>' + msg;
+  }
+
+  function calcRecalcAll(){
+    CALC_LIFT_KEYS.forEach(calcRenderLift);
+    calcCrossCheck();
+    calcRenderProjection();
+    calcSaveStorage();
+  }
+
+  // ── config UI ──
+  function calcPopulateIncrementOptions(){
+    var sel = document.getElementById('calcIncrement');
+    var opts = calcCfg.unit === 'kg' ? [1, 2.5, 5] : [2.5, 5];
+    if (opts.indexOf(calcCfg.inc) === -1) calcCfg.inc = 2.5;
+    sel.innerHTML = opts.map(function(o){
+      return '<option value="' + o + '"' + (o === calcCfg.inc ? ' selected' : '') + '>' + calcFmt(o) + ' ' + calcCfg.unit + '</option>';
+    }).join('');
+  }
+
+  function calcSetUnit(u){
+    if (calcCfg.unit === u) return;
+    calcCfg.unit = u;
+    calcCfg.barWeight = (u === 'kg') ? 20 : 45;
+    document.getElementById('calcBarWeight').value = calcCfg.barWeight;
+    calcPopulateIncrementOptions();
+    document.querySelectorAll('[data-unit-btn]').forEach(function(b){
+      b.setAttribute('aria-pressed', b.dataset.unitBtn === u ? 'true' : 'false');
+    });
+    calcRecalcAll();
+    calcRenderReverse();
+  }
+
+  function calcSetTmBase(v){
+    calcCfg.tmBase = v;
+    document.querySelectorAll('[data-tmbase-btn]').forEach(function(b){
+      b.setAttribute('aria-pressed', parseFloat(b.dataset.tmbaseBtn) === v ? 'true' : 'false');
+    });
+    calcRecalcAll();
+  }
+
+  function calcSetMode(liftKey, mode){
+    calcLiftState[liftKey].mode = mode;
+    var liftEl = document.querySelector('.calc-lift[data-lift="' + liftKey + '"]');
+    liftEl.querySelectorAll('[data-mode-btn]').forEach(function(b){
+      b.setAttribute('aria-pressed', b.dataset.modeBtn === mode ? 'true' : 'false');
+    });
+    liftEl.querySelectorAll('[data-mode-panel]').forEach(function(p){
+      p.hidden = p.dataset.modePanel !== mode;
+    });
+    calcRecalcAll();
+  }
+
+  function calcSyncUI(){
+    document.querySelectorAll('[data-unit-btn]').forEach(function(b){
+      b.setAttribute('aria-pressed', b.dataset.unitBtn === calcCfg.unit ? 'true' : 'false');
+    });
+    document.querySelectorAll('[data-tmbase-btn]').forEach(function(b){
+      b.setAttribute('aria-pressed', parseFloat(b.dataset.tmbaseBtn) === calcCfg.tmBase ? 'true' : 'false');
+    });
+    calcPopulateIncrementOptions();
+    document.getElementById('calcBarWeight').value = calcCfg.barWeight;
+    document.getElementById('calcShowPlates').checked = calcCfg.showPlates;
+
+    CALC_LIFT_KEYS.forEach(function(liftKey){
+      var liftEl = document.querySelector('.calc-lift[data-lift="' + liftKey + '"]');
+      var state = calcLiftState[liftKey];
+      liftEl.querySelectorAll('[data-mode-btn]').forEach(function(b){
+        b.setAttribute('aria-pressed', b.dataset.modeBtn === state.mode ? 'true' : 'false');
+      });
+      liftEl.querySelectorAll('[data-mode-panel]').forEach(function(p){
+        p.hidden = p.dataset.modePanel !== state.mode;
+      });
+      document.getElementById('calc-' + liftKey + '-1rm').value = state.oneRM;
+      document.getElementById('calc-' + liftKey + '-weight').value = state.weight;
+      document.getElementById('calc-' + liftKey + '-reps').value = state.reps;
+    });
+  }
+
+  function calcInit(){
+    var root = document.getElementById('p-calculator');
+    if (!root) return;
+
+    calcLoadStorage();
+    calcSyncUI();
+
+    document.querySelectorAll('[data-unit-btn]').forEach(function(b){
+      b.addEventListener('click', function(){ calcSetUnit(b.dataset.unitBtn); });
+    });
+    document.querySelectorAll('[data-tmbase-btn]').forEach(function(b){
+      b.addEventListener('click', function(){ calcSetTmBase(parseFloat(b.dataset.tmbaseBtn)); });
+    });
+
+    document.getElementById('calcIncrement').addEventListener('change', function(){
+      calcCfg.inc = parseFloat(this.value);
+      calcRecalcAll();
+    });
+
+    document.getElementById('calcBarWeight').addEventListener('input', calcDebounce(function(){
+      var v = parseFloat(this.value);
+      calcCfg.barWeight = isNaN(v) ? 0 : v;
+      calcRecalcAll();
+    }, 300));
+
+    document.getElementById('calcShowPlates').addEventListener('change', function(){
+      calcCfg.showPlates = this.checked;
+      calcRecalcAll();
+    });
+
+    document.getElementById('calcClearData').addEventListener('click', function(){
+      try { localStorage.removeItem(CALC_STORAGE_KEY); } catch(e){}
+      calcCfg = { unit:'kg', tmBase:0.90, inc:2.5, barWeight:20, showPlates:false };
+      CALC_LIFT_KEYS.forEach(function(k){ calcLiftState[k] = { mode:'set', oneRM:'', weight:'', reps:'' }; });
+      calcSyncUI();
+      calcRecalcAll();
+      calcRenderReverse();
+    });
+
+    CALC_LIFT_KEYS.forEach(function(liftKey){
+      var liftEl = document.querySelector('.calc-lift[data-lift="' + liftKey + '"]');
+      var state = calcLiftState[liftKey];
+
+      liftEl.querySelectorAll('[data-mode-btn]').forEach(function(b){
+        b.addEventListener('click', function(){ calcSetMode(liftKey, b.dataset.modeBtn); });
+      });
+
+      document.getElementById('calc-' + liftKey + '-1rm').addEventListener('input', calcDebounce(function(){
+        state.oneRM = this.value;
+        calcRecalcAll();
+      }, 300));
+      document.getElementById('calc-' + liftKey + '-weight').addEventListener('input', calcDebounce(function(){
+        state.weight = this.value;
+        calcRecalcAll();
+      }, 300));
+      document.getElementById('calc-' + liftKey + '-reps').addEventListener('input', calcDebounce(function(){
+        state.reps = this.value;
+        calcRecalcAll();
+      }, 300));
+    });
+
+    ['calcRevWeight','calcRevReps'].forEach(function(id){
+      document.getElementById(id).addEventListener('input', calcDebounce(calcRenderReverse, 300));
+    });
+    document.getElementById('calcRevWeek').addEventListener('change', calcRenderReverse);
+
+    document.getElementById('calcCopyBtn').addEventListener('click', function(){
+      var text = calcBuildExportText();
+      var btn = this;
+      var original = btn.textContent;
+      navigator.clipboard.writeText(text).then(function(){
+        btn.textContent = '✓ Copiado!';
+        setTimeout(function(){ btn.textContent = original; }, 2000);
+      });
+    });
+    document.getElementById('calcPrintBtn').addEventListener('click', function(){ window.print(); });
+
+    calcRecalcAll();
+    calcRenderReverse();
+  }
+
+  calcInit();
+
+})();
+// ── ADMIN REVIEW PANEL (curadoria) ──
+(function(){
+
+function adminEscapeHtml(s){
+  if(s===null||s===undefined) return '';
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function adminIsValidDoi(doi){ return typeof doi==='string' && /^10\.\d{4,9}\/\S+$/i.test(doi.trim()); }
+function adminIsValidPmid(pmid){ return typeof pmid==='string' && /^\d+$/.test(pmid.trim()); }
+function adminWithinTenYears(dateStr){
+  if(!dateStr) return null; // desconhecido, não aplicável
+  var d = new Date(dateStr);
+  if(isNaN(d.getTime())) return null;
+  var floor = new Date();
+  floor.setFullYear(floor.getFullYear()-10);
+  return d >= floor && d <= new Date();
+}
+function adminFmtDate(dateStr){
+  if(!dateStr) return '—';
+  var d = new Date(dateStr);
+  if(isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'short', year:'numeric'});
+}
+
+var ADMIN_STATUS_LABELS = {
+  discovered: 'Descoberto', validating: 'Em validação', validated: 'Validado',
+  pending_review: 'Pendente de revisão', approved: 'Aprovado', published: 'Publicado',
+  rejected: 'Rejeitado', duplicate: 'Duplicado', invalid: 'Inválido',
+};
+
+function renderAdminPanelLink(){
+  var el = document.getElementById('adminPanelLink');
+  if(!el) return;
+  if(window.KinEduSession && KinEduSession.isAdmin()){
+    el.innerHTML = '<a href="#admin-curation" onclick="SP(\'admin-curation\');return false;" ' +
+      'style="display:inline-flex;align-items:center;gap:8px;margin:0 0 20px;padding:10px 16px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--primary);font-weight:700;font-size:13px;text-decoration:none">' +
+      '🛡️ Painel de curadoria científica</a>';
+  } else {
+    el.innerHTML = '';
+  }
+}
+window.renderAdminPanelLink = renderAdminPanelLink;
+
+function adminEnter(){
+  var gate = document.getElementById('adminGate');
+  var content = document.getElementById('adminContent');
+  if(!window.KinEduAdminAPI || !window.KinEduSession || !KinEduSession.isAdmin()){
+    gate.style.display = ''; content.style.display = 'none';
+    document.getElementById('adminGateMsg').textContent = 'Esta área é restrita a administradores. Entre com uma conta autorizada para continuar.';
+    return;
+  }
+  // Sessão local diz "admin" — confirmar com o servidor (a sessão pode ter
+  // expirado, ou a conta pode ter perdido o privilégio desde o login).
+  KinEduAdminAPI.me().then(function(){
+    gate.style.display = 'none'; content.style.display = '';
+    adminLoadCandidates();
+  }).catch(function(err){
+    gate.style.display = ''; content.style.display = 'none';
+    document.getElementById('adminGateMsg').textContent = (err && err.status === 403)
+      ? 'Sua conta não tem permissão de administrador.'
+      : 'Sua sessão expirou. Entre novamente.';
+    if(err && (err.status === 401 || err.status === 403)) KinEduSession.clear();
+  });
+}
+window.adminEnter = adminEnter;
+
+function adminChecklistHTML(c){
+  var items = [];
+  if(c.doi) items.push(adminIsValidDoi(c.doi) ? ['ok','DOI verificado'] : ['warn','DOI em formato não reconhecido']);
+  else items.push(['warn','DOI não informado']);
+
+  if(c.pmid) items.push(adminIsValidPmid(c.pmid) ? ['ok','PMID verificado'] : ['warn','PMID em formato não reconhecido']);
+  else items.push(['warn','PMID não informado']);
+
+  var win = adminWithinTenYears(c.published_at);
+  if(win === true) items.push(['ok','Data dentro dos últimos 10 anos']);
+  else if(win === false) items.push(['warn','Fora da janela de 10 anos']);
+  else items.push(['warn','Data de publicação não informada']);
+
+  // Todo candidato existente já passou pela checagem de duplicidade no
+  // momento em que foi criado (backend/src/services/agent/curationService.js
+  // findDuplicate) — se está listado aqui, não foi sinalizado como duplicata.
+  items.push(c.status === 'duplicate' ? ['warn','Marcado como duplicado'] : ['ok','Não duplicado']);
+
+  items.push(c.source ? ['ok','Fonte identificada: ' + adminEscapeHtml(c.source)] : ['warn','Fonte não identificada']);
+
+  return items.map(function(it){
+    var icon = it[0]==='ok' ? '✓' : '⚠';
+    var cls = it[0]==='ok' ? 'admin-check-ok' : 'admin-check-warn';
+    return '<span class="admin-check ' + cls + '">' + icon + ' ' + it[1] + '</span>';
+  }).join('');
+}
+
+function adminField(label, value){
+  if(!value) return '';
+  return '<details class="admin-detail"><summary>' + adminEscapeHtml(label) + '</summary><p>' + adminEscapeHtml(value) + '</p></details>';
+}
+
+function adminRenderCard(c){
+  var title = c.title_pt || c.title;
+  var statusLabel = ADMIN_STATUS_LABELS[c.status] || c.status;
+  var tags = Array.isArray(c.tags) ? c.tags : [];
+
+  var metaBits = [];
+  if(c.authors) metaBits.push(adminEscapeHtml(c.authors));
+  if(c.journal) metaBits.push(adminEscapeHtml(c.journal));
+  if(c.published_at) metaBits.push(adminFmtDate(c.published_at));
+  if(c.doi) metaBits.push('DOI: ' + adminEscapeHtml(c.doi));
+  if(c.pmid) metaBits.push('PMID: ' + adminEscapeHtml(c.pmid));
+  if(c.study_type) metaBits.push(adminEscapeHtml(c.study_type));
+
+  var actions = '';
+  if(c.status === 'pending_review'){
+    actions = '<div class="admin-card-actions">' +
+      '<button class="admin-btn admin-btn-approve" onclick="adminApprove(\'' + c.id + '\')">✓ Aprovar</button>' +
+      '<button class="admin-btn admin-btn-reject" onclick="adminReject(\'' + c.id + '\')">✕ Rejeitar</button>' +
+      (c.doi ? '<a class="admin-btn admin-btn-secondary" href="https://doi.org/' + encodeURIComponent(c.doi) + '" target="_blank" rel="noopener">Ver artigo original ↗</a>' : '') +
+      '</div>';
+  } else {
+    var reviewNote = c.reviewed_at ? ('Revisado em ' + adminFmtDate(c.reviewed_at)) : '';
+    actions = '<div class="admin-card-actions admin-card-actions-readonly">' +
+      '<span class="admin-review-note">' + adminEscapeHtml(reviewNote) + '</span>' +
+      (c.rejection_reason ? '<span class="admin-rejection-reason">Motivo: ' + adminEscapeHtml(c.rejection_reason) + '</span>' : '') +
+      '</div>';
+  }
+
+  return '<div class="admin-card">' +
+    '<div class="admin-card-head">' +
+      '<span class="admin-status-badge admin-status-' + adminEscapeHtml(c.status) + '">' + adminEscapeHtml(statusLabel) + '</span>' +
+      (c.topic ? '<span class="admin-card-topic">' + adminEscapeHtml(c.topic) + '</span>' : '') +
+      (tags.length ? tags.map(function(t){ return '<span class="admin-card-tag">' + adminEscapeHtml(t) + '</span>'; }).join('') : '') +
+    '</div>' +
+    '<h3 class="admin-card-title">' + adminEscapeHtml(title) + '</h3>' +
+    (c.title_pt && c.title !== c.title_pt ? '<div class="admin-card-title-orig">' + adminEscapeHtml(c.title) + '</div>' : '') +
+    '<div class="admin-card-meta">' + metaBits.join(' · ') + '</div>' +
+    '<div class="admin-checklist">' + adminChecklistHTML(c) + '</div>' +
+    '<div class="admin-card-body">' +
+      adminField('Resumo', c.abstract) +
+      adminField('Resumo (PT)', c.summary_pt) +
+      adminField('Metodologia', c.methodology) +
+      adminField('População', c.population) +
+      adminField('Principais resultados', c.main_results) +
+      adminField('Conclusão', c.conclusion) +
+      adminField('Aplicação prática', c.practical_application) +
+      adminField('Limitações', c.limitations) +
+    '</div>' +
+    actions +
+  '</div>';
+}
+
+function adminLoadCandidates(){
+  var list = document.getElementById('adminList');
+  var summary = document.getElementById('adminSummary');
+  list.innerHTML = '<p class="admin-loading">Carregando…</p>';
+
+  var filters = {
+    status: document.getElementById('adminFilterStatus').value,
+    category: document.getElementById('adminFilterCategory').value.trim(),
+    study_type: document.getElementById('adminFilterStudyType').value,
+    year: document.getElementById('adminFilterYear').value,
+  };
+
+  KinEduAdminAPI.listCandidates(filters).then(function(result){
+    summary.textContent = result.total + ' candidato' + (result.total !== 1 ? 's' : '') + ' encontrado' + (result.total !== 1 ? 's' : '');
+    if(!result.candidates.length){
+      list.innerHTML = '<p class="admin-empty">Nenhum candidato encontrado para esses filtros.</p>';
+      return;
+    }
+    list.innerHTML = result.candidates.map(adminRenderCard).join('');
+  }).catch(function(err){
+    if(err && (err.status === 401 || err.status === 403)){ adminEnter(); return; }
+    list.innerHTML = '<p class="admin-empty">Não foi possível carregar os candidatos agora.</p>';
+  });
+}
+window.adminLoadCandidates = adminLoadCandidates;
+
+function adminApprove(id){
+  if(!confirm('Aprovar este candidato? Ele passará a contar como revisado e aprovado por um administrador.')) return;
+  KinEduAdminAPI.approve(id).then(function(){
+    adminLoadCandidates();
+  }).catch(function(err){
+    alert((err && err.data && err.data.message) || 'Não foi possível aprovar este candidato.');
+  });
+}
+window.adminApprove = adminApprove;
+
+function adminReject(id){
+  var reason = prompt('Motivo da rejeição (obrigatório):');
+  if(reason === null) return;
+  if(!reason.trim()){ alert('É necessário informar um motivo.'); return; }
+  KinEduAdminAPI.reject(id, reason.trim()).then(function(){
+    adminLoadCandidates();
+  }).catch(function(err){
+    alert((err && err.data && err.data.message) || 'Não foi possível rejeitar este candidato.');
+  });
+}
+window.adminReject = adminReject;
+
+})();
