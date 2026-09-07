@@ -500,7 +500,7 @@
         <div class="hp-ftls"><a href="#search" onclick="SP('search');return false;">Busca Global</a><a href="#profile" onclick="SP('profile');return false;">Meu Perfil</a></div>
       </div>
     </div>
-    <div class="hp-ftb"><span>© 2025 KinEdu. Todos os direitos reservados.</span><div style="display:flex;gap:20px"><a href="#">Termos de Uso</a><a href="#">Privacidade</a></div></div>
+    <div class="hp-ftb"><span>© 2025 KinEdu. Todos os direitos reservados.</span><div style="display:flex;gap:20px"><span>Termos de Uso</span><span>Privacidade</span></div></div>
   </div>
 </footer>
 
@@ -921,25 +921,25 @@
     <div class="related-section">
       <div class="related-title">Continue aprendendo</div>
       <div class="related-grid">
-        <div class="related-card">
+        <div class="related-card is-static">
           <span class="tag-sm ts-physio">Fisiologia</span>
           <h4>Estresse Metabólico e Hipertrofia: o papel do acúmulo de metabólitos</h4>
           <p>Como o lactato, H⁺ e fosfato inorgânico contribuem para o crescimento muscular e quando priorizar este mecanismo.</p>
           <div class="related-meta">12 min · Avançado</div>
         </div>
-        <div class="related-card">
+        <div class="related-card is-static">
           <span class="tag-sm ts-strength">Força</span>
           <h4>Sobrecarga Progressiva: o princípio mais subestimado do treinamento</h4>
           <p>Estratégias práticas para garantir progressão contínua sem depender apenas do aumento de carga.</p>
           <div class="related-meta">10 min · Intermediário</div>
         </div>
-        <div class="related-card">
+        <div class="related-card" onclick="SP('art3')">
           <span class="tag-sm ts-biomech">Biomecânica</span>
           <h4>Amplitude de Movimento e Hipertrofia: o que a ciência mais recente revela</h4>
           <p>Revisão das evidências sobre treinamento em comprimento muscular longo e suas implicações para a hipertrofia regional.</p>
           <div class="related-meta">14 min · Avançado</div>
         </div>
-        <div class="related-card">
+        <div class="related-card" onclick="SP('art4')">
           <span class="tag-sm ts-nutrition">Nutrição</span>
           <h4>Síntese Proteica Muscular: o que ativa, o que bloqueia e quanto tempo dura</h4>
           <p>Da nutrição à sinalização celular — como otimizar a janela de síntese proteica pós-exercício.</p>
@@ -1443,21 +1443,21 @@ function setLvl(el){
       </div>
       <div class="module-body">
         <div class="lesson-list">
-          <a class="lesson-item" href="#article" onclick="SP('article');return false;">
+          <div class="lesson-item is-static">
             <div class="lesson-icon li-done">📄</div>
             <div class="lesson-text"><div class="lesson-title">O que é fisiologia do exercício e por que ela importa</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>8 min</span></div></div>
             <div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-          </a>
-          <a class="lesson-item" href="#">
+          </div>
+          <div class="lesson-item is-static">
             <div class="lesson-icon li-done">📄</div>
             <div class="lesson-text"><div class="lesson-title">Homeostase e resposta ao exercício: o equilíbrio que muda tudo</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>10 min</span></div></div>
             <div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-          </a>
-          <a class="lesson-item" href="#">
+          </div>
+          <div class="lesson-item is-static">
             <div class="lesson-icon li-done">📄</div>
             <div class="lesson-text"><div class="lesson-title">Princípios do treinamento: sobrecarga, especificidade e reversibilidade</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>12 min</span></div></div>
             <div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-          </a>
+          </div>
         </div>
       </div>
     </div>
@@ -1472,9 +1472,9 @@ function setLvl(el){
       </div>
       <div class="module-body">
         <div class="lesson-list">
-          <a class="lesson-item" href="#"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Anatomia do sarcômero e o modelo de filamentos deslizantes</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>14 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></a>
-          <a class="lesson-item" href="#"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Fibras tipo I, IIa e IIx: características, recrutamento e implicações</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>11 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></a>
-          <a class="lesson-item" href="#"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Unidades motoras e o princípio do tamanho de Henneman</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>13 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></a>
+          <div class="lesson-item is-static"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Anatomia do sarcômero e o modelo de filamentos deslizantes</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>14 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="lesson-item is-static"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Fibras tipo I, IIa e IIx: características, recrutamento e implicações</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>11 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="lesson-item is-static"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Unidades motoras e o princípio do tamanho de Henneman</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>13 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
         </div>
       </div>
     </div>
@@ -1490,8 +1490,8 @@ function setLvl(el){
       <div class="module-body">
         <div class="lesson-list">
           <a class="lesson-item" href="#article" onclick="SP('article');return false;"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Tensão Mecânica e Hipertrofia: mecanismos moleculares</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>18 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></a>
-          <a class="lesson-item" href="#"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Estresse metabólico: o papel dos metabólitos na hipertrofia</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>12 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></a>
-          <a class="lesson-item" href="#"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Volume, intensidade e frequência: variáveis que controlam a hipertrofia</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>15 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></a>
+          <div class="lesson-item is-static"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Estresse metabólico: o papel dos metabólitos na hipertrofia</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>12 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="lesson-item is-static"><div class="lesson-icon li-done">📄</div><div class="lesson-text"><div class="lesson-title">Volume, intensidade e frequência: variáveis que controlam a hipertrofia</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>15 min</span></div></div><div class="lesson-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
         </div>
       </div>
     </div>
@@ -1506,11 +1506,11 @@ function setLvl(el){
       </div>
       <div class="module-body">
         <div class="lesson-list">
-          <a class="lesson-item" href="#" style="background:rgba(243,156,18,.05);border-left:3px solid var(--accent)">
+          <div class="lesson-item is-static" style="background:rgba(243,156,18,.05);border-left:3px solid var(--accent)">
             <div class="lesson-icon li-active">▶️</div>
             <div class="lesson-text"><div class="lesson-title">Bioenergética: sistemas ATP-PCr e glicolítico</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>16 min</span><span class="lesson-meta-dot"></span><span style="color:var(--accent);font-weight:600">Em andamento</span></div></div>
             <span class="lesson-badge lb-read">Ler agora</span>
-          </a>
+          </div>
           <div class="lesson-item locked">
             <div class="lesson-icon li-locked">📄</div>
             <div class="lesson-text"><div class="lesson-title">O sistema oxidativo: mitocôndrias, ciclo de Krebs e fosforilação oxidativa</div><div class="lesson-meta"><span>Artigo</span><span class="lesson-meta-dot"></span><span>18 min</span></div></div>
@@ -1607,21 +1607,21 @@ function setLvl(el){
     <div class="side-card">
       <div class="side-card-title">Trilhas relacionadas</div>
       <div class="related-paths">
-        <a class="rp-item" href="#">
+        <div class="rp-item is-static">
           <div class="rp-icon">🦴</div>
           <div class="rp-text"><strong>Anatomia Funcional</strong><span>4 módulos · 18 aulas</span></div>
           <div class="rp-arrow">›</div>
-        </a>
-        <a class="rp-item" href="#">
+        </div>
+        <div class="rp-item is-static">
           <div class="rp-icon">📋</div>
           <div class="rp-text"><strong>Periodização Aplicada</strong><span>4 módulos · 16 aulas</span></div>
           <div class="rp-arrow">›</div>
-        </a>
-        <a class="rp-item" href="#">
+        </div>
+        <div class="rp-item is-static">
           <div class="rp-icon">🥗</div>
           <div class="rp-text"><strong>Nutrição para Performance</strong><span>5 módulos · 24 aulas</span></div>
           <div class="rp-arrow">›</div>
-        </a>
+        </div>
       </div>
     </div>
   </aside>
@@ -1756,7 +1756,7 @@ function setLvl(el){
         <span class="rc-tag rt-physio">Fisiologia</span>
         <div class="evidence-grade"><span class="eg-label">Evidência:</span><div class="eg-dots"><div class="eg-dot on"></div><div class="eg-dot on"></div><div class="eg-dot on"></div><div class="eg-dot on"></div><div class="eg-dot"></div></div></div>
         <span class="rc-year">2021</span>
-        <a class="rc-doi" href="#">DOI →</a>
+        
       </div>
     </div>
 
@@ -1794,7 +1794,7 @@ function setLvl(el){
         <span class="rc-tag rt-hypert">Hipertrofia</span>
         <div class="evidence-grade"><span class="eg-label">Evidência:</span><div class="eg-dots"><div class="eg-dot on"></div><div class="eg-dot on"></div><div class="eg-dot on"></div><div class="eg-dot on"></div><div class="eg-dot on"></div></div></div>
         <span class="rc-year">2022</span>
-        <a class="rc-doi" href="#">DOI →</a>
+        
       </div>
     </div>
 
@@ -1813,7 +1813,7 @@ function setLvl(el){
         <span class="rc-tag rt-physio">Fisiologia</span>
         <div class="evidence-grade"><span class="eg-label">Evidência:</span><div class="eg-dots"><div class="eg-dot on"></div><div class="eg-dot on"></div><div class="eg-dot on"></div><div class="eg-dot"></div><div class="eg-dot"></div></div></div>
         <span class="rc-year">2021</span>
-        <a class="rc-doi" href="#">DOI →</a>
+        
       </div>
     </div>
 
@@ -2354,7 +2354,7 @@ function setLvl(el){
     <!-- BOOKMARKS -->
     <div class="section-title">
       Artigos salvos recentemente
-      <a class="section-link" href="#">Ver todos (18) →</a>
+      
     </div>
     <div class="bookmarks-grid">
       <div class="bookmark-card" onclick="SP('article')">
@@ -2362,17 +2362,17 @@ function setLvl(el){
         <div class="bookmark-title">Tensão Mecânica e Hipertrofia Muscular: mecanismos e aplicação prática</div>
         <div class="bookmark-meta">18 min · Avançado · Salvo há 2 dias</div>
       </div>
-      <div class="bookmark-card" onclick="location.href=\'sc-article.html\'" style="cursor:pointer">
+      <div class="bookmark-card" onclick="SP('art2')" style="cursor:pointer">
         <span class="bm-tag bmt-hypert">Hipertrofia</span>
         <div class="bookmark-title">Volume de treino e hipertrofia: relação dose-resposta em adultos treinados</div>
         <div class="bookmark-meta">14 min · Avançado · Salvo há 5 dias</div>
       </div>
-      <div class="bookmark-card" onclick="location.href=\'sc-article.html\'" style="cursor:pointer">
+      <div class="bookmark-card" onclick="SP('art4')" style="cursor:pointer">
         <span class="bm-tag bmt-nutri">Nutrição</span>
         <div class="bookmark-title">Proteína e síntese muscular: quanto, quando e como distribuir ao longo do dia</div>
         <div class="bookmark-meta">12 min · Intermediário · Salvo há 1 sem.</div>
       </div>
-      <div class="bookmark-card" onclick="location.href=\'sc-article.html\'" style="cursor:pointer">
+      <div class="bookmark-card is-static">
         <span class="bm-tag bmt-strength">Força</span>
         <div class="bookmark-title">Adaptações neurais ao treinamento: o que acontece antes dos músculos crescerem</div>
         <div class="bookmark-meta">14 min · Intermediário · Salvo há 2 sem.</div>
@@ -2454,11 +2454,11 @@ function setLvl(el){
           <div class="rec-text"><strong>Periodização para Hipertrofia</strong><span>Baseado em: Fisiologia do Exercício</span></div>
           <div class="rec-arrow">›</div>
         </a>
-        <a class="rec-item" href="#article" onclick="SP('article');return false;">
+        <div class="rec-item is-static">
           <div class="rec-icon">📄</div>
           <div class="rec-text"><strong>Fadiga central vs. periférica</strong><span>Artigo · 13 min</span></div>
           <div class="rec-arrow">›</div>
-        </a>
+        </div>
         <a class="rec-item" href="#library" onclick="SP('library');return false;">
           <div class="rec-icon">🔬</div>
           <div class="rec-text"><strong>Schoenfeld et al. (2017)</strong><span>Meta-análise · Hipertrofia</span></div>
@@ -2721,7 +2721,7 @@ function setLvl(el){
           </div>
         </a>
 
-        <a class="res-card" href="#article" onclick="SP('article');return false;">
+        <a class="res-card" href="#art2" onclick="SP('art2');return false;">
           <div class="res-card-top">
             <span class="res-card-icon">📄</span>
             <div style="flex:1;min-width:0">
@@ -2742,7 +2742,7 @@ function setLvl(el){
           </div>
         </a>
 
-        <a class="res-card" href="#article" onclick="SP('article');return false;">
+        <a class="res-card" href="#art3" onclick="SP('art3');return false;">
           <div class="res-card-top">
             <span class="res-card-icon">📄</span>
             <div style="flex:1;min-width:0">
@@ -2999,7 +2999,7 @@ function setLvl(el){
       </div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Pré-requisitos</div>
-      <div class="hsp-prereqs"><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Anatomia do músculo esquelético</a><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Princípios do treinamento de força</a></div>
+      <div class="hsp-prereqs"><span class="prereq-link is-static"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Anatomia do músculo esquelético</span><span class="prereq-link is-static"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Princípios do treinamento de força</span></div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Objetivos</div>
       <div class="hsp-objectives"><div class="obj-item"><div class="obj-dot"></div>Compreender os 3 mecanismos clássicos</div><div class="obj-item"><div class="obj-dot"></div>Entender por que a tensão mecânica é primária</div><div class="obj-item"><div class="obj-dot"></div>Aplicar o conceito na prescrição de treino</div></div>
@@ -3050,19 +3050,19 @@ function setLvl(el){
   </div>
 </div></div><div class="content-section" id="s_mistakes_art1"><span class="section-anchor"></span><h2 class="article-h2">Erros comuns</h2><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Perseguir a dor muscular como indicador de crescimento</h3><div class="prose"><p style="font-size:14.5px">DOMS (dor muscular de início tardio) é uma resposta inflamatória ao dano — não uma métrica de hipertrofia. Você pode crescer muito com pouca ou nenhuma dor pós-treino, especialmente conforme o músculo se adapta ao estímulo.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Confundir 'pump' com hipertrofia</h3><div class="prose"><p style="font-size:14.5px">O inchaço muscular durante o treino é transitório — desaparece em horas. Não representa ganho de tecido contrátil. Buscar 'pump' como objetivo principal pode levar a protocolos com tensão insuficiente.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Usar cargas muito leves e parar longe da falha</h3><div class="prose"><p style="font-size:14.5px">Séries com cargas baixas terminadas com muito esforço em reserva (RIR >4) geram tensão mecânica insuficiente. Para hipertrofiar com cargas leves, é necessário ir muito perto da falha — o que aumenta o custo metabólico sem garantir mais crescimento que cargas moderadas.</p></div></div></div></div><div class="content-section" id="s_takeaways_art1"><span class="section-anchor"></span><div class="block-takeaways"><div class="block-label">✅ Pontos-Chave</div><h3 class="article-h3">O que levar desta leitura</h3><div class="takeaway-list"><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">A <strong style='color:#fff'>tensão mecânica</strong> é o mecanismo primário — possivelmente o único essencial para hipertrofia.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">O <strong style='color:#fff'>dano muscular</strong> é provavelmente um correlato, não uma causa — DOMS não é métrica de progresso.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">O <strong style='color:#fff'>estresse metabólico</strong> tem evidência causal fraca; é modulador, relevante sobretudo no BFR.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Treinar <strong style='color:#fff'>perto da falha</strong> (RIR 0-4) com sobrecarga progressiva é a aplicação central.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Faixas de <strong style='color:#fff'>6-30 repetições</strong> podem hipertrofiar de forma similar desde que haja esforço próximo à falha.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Respostas hormonais agudas pós-treino (testosterona, GH) <strong style='color:#fff'>não determinam</strong> os ganhos hipertróficos.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Use técnicas metabólicas como ferramentas de <strong style='color:#fff'>volume adicional e variedade</strong>, não como substitutos da tensão.</span></div></div></div></div>
 <div class="references-section"><div class="references-title">Referências</div><div class="ref-list"><div class="ref-item"><span class="ref-num">1.</span><span>Schoenfeld BJ. The mechanisms of muscle hypertrophy and their application to resistance training. <em>J Strength Cond Res.</em> 2010;24(10):2857-2872. <a class="ref-link" href="https://doi.org/10.1519/jsc.0b013e3181e840f3" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">2.</span><span>Schoenfeld BJ. Does exercise-induced muscle damage play a role in skeletal muscle hypertrophy? <em>J Strength Cond Res.</em> 2012;26(5):1441-1453. <a class="ref-link" href="https://doi.org/10.1519/jsc.0b013e31824f207e" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">3.</span><span>Lawson D, Vann C, Schoenfeld BJ, Haun C. Beyond Mechanical Tension: A Review of Resistance Exercise-Induced Lactate Responses & Muscle Hypertrophy. <em>J Funct Morphol Kinesiol.</em> 2022;7(4):81. <a class="ref-link" href="https://doi.org/10.3390/jfmk7040081" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">4.</span><span>Roberts MD, et al. Mechanisms of mechanical overload-induced skeletal muscle hypertrophy. <em>Physiol Rev.</em> 2023. <a class="ref-link" href="https://doi.org/10.1152/physrev.00039.2022" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">5.</span><span>Wackerhage H, et al. Stimuli and sensors that initiate skeletal muscle hypertrophy following resistance exercise. <em>J Appl Physiol.</em> 2019;126(1):30-43. <a class="ref-link" href="https://doi.org/10.1152/japplphysiol.00685.2018" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div></div></div>
-<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('art2')" style="cursor:pointer">
           <span class="tag-sm ts-hypert">Hipertrofia</span>
           <h4>Volume de Treino e Hipertrofia: quantas séries por semana?</h4><p>A relação dose-resposta entre volume semanal e ganho de massa muscular.</p>
           <div class="related-meta">14 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art3')" style="cursor:pointer">
           <span class="tag-sm ts-physio">Fisiologia</span>
           <h4>Amplitude de Movimento e Hipertrofia: treinar no alongamento funciona?</h4><p>Evidências sobre treinamento em comprimento muscular longo e titina.</p>
           <div class="related-meta">16 min · Avançado</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art4')" style="cursor:pointer">
           <span class="tag-sm ts-nutrition">Nutrição</span>
           <h4>Proteína e Síntese Proteica: quantidade, timing e qualidade</h4><p>Quanto, quando e como distribuir a proteína para maximizar a hipertrofia.</p>
           <div class="related-meta">15 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art5')" style="cursor:pointer">
           <span class="tag-sm ts-strength">Força</span>
           <h4>Frequência de Treino: quantas vezes treinar cada músculo por semana?</h4><p>Volume vs frequência — o que realmente importa para a hipertrofia.</p>
           <div class="related-meta">13 min · Avançado</div>
@@ -3124,7 +3124,7 @@ function setLvl(el){
       </div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Pré-requisitos</div>
-      <div class="hsp-prereqs"><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Princípios do treinamento de força</a><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Os 3 mecanismos da hipertrofia</a></div>
+      <div class="hsp-prereqs"><span class="prereq-link is-static"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Princípios do treinamento de força</span><a class="prereq-link" href="#art1" onclick="SP('art1');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Os 3 mecanismos da hipertrofia</a></div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Objetivos</div>
       <div class="hsp-objectives"><div class="obj-item"><div class="obj-dot"></div>Entender a relação dose-resposta volume-hipertrofia</div><div class="obj-item"><div class="obj-dot"></div>Identificar a faixa de volume ótima</div><div class="obj-item"><div class="obj-dot"></div>Aplicar progressão de volume na programação</div></div>
@@ -3175,19 +3175,19 @@ function setLvl(el){
   </div>
 </div></div><div class="content-section" id="s_mistakes_art2"><span class="section-anchor"></span><h2 class="article-h2">Erros comuns</h2><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Saltar para volume muito alto de uma vez</h3><div class="prose"><p style="font-size:14.5px">Iniciar um ciclo com 20+ séries por grupo sem progressão gradual compromete a recuperação e aumenta o risco de lesão. O volume deve ser construído semana a semana.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Contar séries de aquecimento no volume</h3><div class="prose"><p style="font-size:14.5px">Séries fáceis, longe da falha, não contribuem para hipertrofia de forma significativa. Inflar o volume com séries de baixo esforço gera a ilusão de estímulo sem o resultado.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Assumir que 'mais é sempre melhor'</h3><div class="prose"><p style="font-size:14.5px">A relação dose-resposta tem limites. Acima de certo ponto, volume adicional gera junk volume — séries que custam recuperação sem retornar crescimento. O ponto de virada é individual, mas existente.</p></div></div></div></div><div class="content-section" id="s_takeaways_art2"><span class="section-anchor"></span><div class="block-takeaways"><div class="block-label">✅ Pontos-Chave</div><h3 class="article-h3">O que levar desta leitura</h3><div class="takeaway-list"><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Volume é a variável com sinal dose-resposta <strong style='color:#fff'>mais forte</strong> para hipertrofia.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Faixa prática: <strong style='color:#fff'>~10-20 séries semanais por grupo</strong> para a maioria dos treinados.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Cada série semanal adicional ≈ <strong style='color:#fff'>0,37% mais hipertrofia</strong> (Schoenfeld 2017), até um limite.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text"><strong style='color:#fff'>Múltiplas séries > série única</strong> — ~40% mais ganho (Krieger 2010).</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Só conta série <strong style='color:#fff'>próxima à falha</strong> (≤4 reps de reserva) como volume efetivo.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Tríceps pode tolerar e se beneficiar de volume <strong style='color:#fff'>alto (>20 séries)</strong> — individualize.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Comece no limite inferior e <strong style='color:#fff'>progrida o volume</strong> ao longo do tempo — não inicie no teto.</span></div></div></div></div>
 <div class="references-section"><div class="references-title">Referências</div><div class="ref-list"><div class="ref-item"><span class="ref-num">1.</span><span>Krieger JW. Single vs. Multiple Sets of Resistance Exercise for Muscle Hypertrophy: A Meta-Analysis. <em>J Strength Cond Res.</em> 2010;24(4):1150-1159. <a class="ref-link" href="https://doi.org/10.1519/jsc.0b013e3181d4d436" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">2.</span><span>Schoenfeld BJ, Ogborn D, Krieger JW. Dose-response relationship between weekly resistance training volume and increases in muscle mass. <em>J Sports Sci.</em> 2017;35(11):1073-1082. <a class="ref-link" href="https://doi.org/10.1080/02640414.2016.1210197" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">3.</span><span>Schoenfeld BJ, Contreras B, Krieger J, et al. Resistance Training Volume Enhances Muscle Hypertrophy but Not Strength in Trained Men. <em>Med Sci Sports Exerc.</em> 2019;51(1):94-103. <a class="ref-link" href="https://doi.org/10.1249/mss.0000000000001764" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">4.</span><span>Baz-Valle E, et al. A Systematic Review of the Effects of Different Resistance Training Volumes on Muscle Hypertrophy. <em>J Hum Kinet.</em> 2022;81:199-210. <a class="ref-link" href="https://doi.org/10.2478/hukin-2022-0017" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">5.</span><span>Baz-Valle E, Fontes-Villalba M, Santos-Concejero J. Total Number of Sets as a Training Volume Quantification Method for Muscle Hypertrophy: A Systematic Review. <em>J Strength Cond Res.</em> 2021;35(3):870-878. <a class="ref-link" href="https://doi.org/10.1519/jsc.0000000000002776" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div></div></div>
-<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('art1')" style="cursor:pointer">
           <span class="tag-sm ts-physio">Fisiologia</span>
           <h4>Os 3 Mecanismos da Hipertrofia Muscular</h4><p>Por que a tensão mecânica é o driver primário do crescimento muscular.</p>
           <div class="related-meta">14 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art5')" style="cursor:pointer">
           <span class="tag-sm ts-strength">Força</span>
           <h4>Frequência de Treino: quantas vezes por semana treinar cada músculo?</h4><p>Como volume e frequência interagem para maximizar a hipertrofia.</p>
           <div class="related-meta">13 min · Avançado</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art3')" style="cursor:pointer">
           <span class="tag-sm ts-biomech">Biomecânica</span>
           <h4>Amplitude de Movimento e Hipertrofia</h4><p>Treinar no comprimento longo maximiza o crescimento? O que a ciência diz.</p>
           <div class="related-meta">16 min · Avançado</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art4')" style="cursor:pointer">
           <span class="tag-sm ts-nutrition">Nutrição</span>
           <h4>Proteína: quantidade, timing e qualidade para hipertrofia</h4><p>Quanto proteína consumir e como distribuir ao longo do dia.</p>
           <div class="related-meta">15 min · Intermediário</div>
@@ -3249,7 +3249,7 @@ function setLvl(el){
       </div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Pré-requisitos</div>
-      <div class="hsp-prereqs"><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Anatomia do músculo esquelético</a><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Os 3 mecanismos da hipertrofia</a></div>
+      <div class="hsp-prereqs"><span class="prereq-link is-static"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Anatomia do músculo esquelético</span><a class="prereq-link" href="#art1" onclick="SP('art1');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Os 3 mecanismos da hipertrofia</a></div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Objetivos</div>
       <div class="hsp-objectives"><div class="obj-item"><div class="obj-dot"></div>Entender o papel do comprimento muscular na hipertrofia</div><div class="obj-item"><div class="obj-dot"></div>Compreender o mecanismo da titina</div><div class="obj-item"><div class="obj-dot"></div>Selecionar exercícios por posição de alongamento</div></div>
@@ -3300,19 +3300,19 @@ function setLvl(el){
   </div>
 </div></div><div class="content-section" id="s_mistakes_art3"><span class="section-anchor"></span><h2 class="article-h2">Erros comuns</h2><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Cortar a amplitude na porção alongada para levantar mais carga</h3><div class="prose"><p style="font-size:14.5px">Este é o oposto do ideal. Aumentar a carga reduzindo a amplitude na fase de maior benefício hipertrófico é uma troca desfavorável para o crescimento muscular — mesmo que melhore o ego.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Fazer parciais no encurtamento achando que 'isola melhor'</h3><div class="prose"><p style="font-size:14.5px">Parciais na porção encurtada são a pior opção para hipertrofia. Além de menor benefício, a musculatura trabalha em desvantagem mecânica com pouca tensão passiva.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Sacrificar controle e segurança em busca de 'mais alongamento'</h3><div class="prose"><p style="font-size:14.5px">Forçar ADM além da amplitude segura — especialmente sob carga — aumenta o risco de lesão sem garantir benefício proporcional. O objetivo é carga + comprimento longo <em>dentro</em> da amplitude segura.</p></div></div></div></div><div class="content-section" id="s_takeaways_art3"><span class="section-anchor"></span><div class="block-takeaways"><div class="block-label">✅ Pontos-Chave</div><h3 class="article-h3">O que levar desta leitura</h3><div class="takeaway-list"><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Treinar em <strong style='color:#fff'>comprimentos musculares longos</strong> é ao menos tão eficaz quanto ADM completa — com possível pequena vantagem.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text"><strong style='color:#fff'>Parciais no alongamento > parciais no encurtamento</strong> para hipertrofia — consistentemente.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">O efeito é mais claro em <strong style='color:#fff'>músculos biarticulares</strong>: isquiotibiais, cabeça longa do tríceps, gastrocnêmio.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Mecanismo: tensão passiva mediada pela <strong style='color:#fff'>titina</strong> somada à tensão ativa → mTORC1.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Isquiotibiais: <strong style='color:#fff'>leg curl sentado ~14% vs deitado ~9%</strong> (Maeo 2021) — escolha faz diferença.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Selecione exercícios pela <strong style='color:#fff'>posição de alongamento do músculo-alvo</strong>, não apenas pelo padrão de movimento.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Se cortar amplitude por fadiga: <strong style='color:#fff'>preserve a porção alongada, corte a encurtada</strong>.</span></div></div></div></div>
 <div class="references-section"><div class="references-title">Referências</div><div class="ref-list"><div class="ref-item"><span class="ref-num">1.</span><span>Maeo S, et al. Greater Hamstrings Muscle Hypertrophy but Similar Damage Protection after Training at Long versus Short Muscle Lengths. <em>Med Sci Sports Exerc.</em> 2021;53(4):825-837. <a class="ref-link" href="https://doi.org/10.1249/mss.0000000000002523" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">2.</span><span>Pedrosa GF, et al. Partial range of motion training elicits favorable improvements in muscular adaptations when carried out at long muscle lengths. <em>Eur J Sport Sci.</em> 2022;22(8):1250-1260. <a class="ref-link" href="https://doi.org/10.1080/17461391.2021.1927199" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">3.</span><span>Kassiano W, et al. Greater Gastrocnemius Muscle Hypertrophy After Partial Range of Motion Training Performed at Long Muscle Lengths. <em>J Strength Cond Res.</em> 2023;37(9):1746-1753. <a class="ref-link" href="https://doi.org/10.1519/jsc.0000000000004460" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">4.</span><span>Maeo S, et al. Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position. <em>Eur J Sport Sci.</em> 2023;23(7):1240-1250. <a class="ref-link" href="https://doi.org/10.1080/17461391.2022.2100279" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">5.</span><span>Wolf M, et al. Partial Vs Full Range of Motion Resistance Training: A Systematic Review and Meta-Analysis. <em>Int J Strength Cond.</em> 2023;3(1). <a class="ref-link" href="https://doi.org/10.47206/ijsc.v3i1.182" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">6.</span><span>Schoenfeld BJ, Grgic J. Effects of range of motion on muscle development during resistance training interventions. <em>SAGE Open Med.</em> 2020;8. <a class="ref-link" href="https://doi.org/10.1177/2050312120901559" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div></div></div>
-<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('art1')" style="cursor:pointer">
           <span class="tag-sm ts-physio">Fisiologia</span>
           <h4>Os 3 Mecanismos da Hipertrofia</h4><p>Tensão mecânica, dano muscular e estresse metabólico — qual realmente importa?</p>
           <div class="related-meta">14 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art2')" style="cursor:pointer">
           <span class="tag-sm ts-hypert">Hipertrofia</span>
           <h4>Volume de Treino: quantas séries por semana?</h4><p>A relação dose-resposta entre volume semanal e crescimento muscular.</p>
           <div class="related-meta">14 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art4')" style="cursor:pointer">
           <span class="tag-sm ts-nutrition">Nutrição</span>
           <h4>Proteína: quantidade, timing e qualidade</h4><p>Como distribuir a proteína ao longo do dia para maximizar a síntese muscular.</p>
           <div class="related-meta">15 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art5')" style="cursor:pointer">
           <span class="tag-sm ts-strength">Força</span>
           <h4>Frequência de Treino: quantas vezes por semana?</h4><p>Volume vs frequência — como interagem e o que realmente importa.</p>
           <div class="related-meta">13 min · Avançado</div>
@@ -3374,7 +3374,7 @@ function setLvl(el){
       </div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Pré-requisitos</div>
-      <div class="hsp-prereqs"><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Princípios da nutrição esportiva</a><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Os 3 mecanismos da hipertrofia</a></div>
+      <div class="hsp-prereqs"><span class="prereq-link is-static"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Princípios da nutrição esportiva</span><a class="prereq-link" href="#art1" onclick="SP('art1');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Os 3 mecanismos da hipertrofia</a></div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Objetivos</div>
       <div class="hsp-objectives"><div class="obj-item"><div class="obj-dot"></div>Calcular o alvo proteico por kg/dia</div><div class="obj-item"><div class="obj-dot"></div>Entender o papel da leucina como gatilho anabólico</div><div class="obj-item"><div class="obj-dot"></div>Distribuir proteína ao longo do dia para maximizar SPM</div></div>
@@ -3425,19 +3425,19 @@ function setLvl(el){
   </div>
 </div></div><div class="content-section" id="s_mistakes_art4"><span class="section-anchor"></span><h2 class="article-h2">Erros comuns</h2><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Focar apenas no shake pós-treino e negligenciar o total diário</h3><div class="prose"><p style="font-size:14.5px">O timing pós-treino importa menos do que o total diário bem distribuído. Tomar whey após o treino mas consumir só 80 g/dia no total é menos eficaz do que consumir 160 g/dia distribuídos em 4-5 refeições sem timing perfeito.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Concentrar proteína em uma ou duas refeições</h3><div class="prose"><p style="font-size:14.5px">Comer 120 g de proteína no jantar e pouco no resto do dia ativa o mecanismo 'muscle full' — o músculo para de sintetizar mesmo com aminoácidos disponíveis. Distribuição cria mais 'pulsos' de SPM.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Ignorar a resistência anabólica em idosos</h3><div class="prose"><p style="font-size:14.5px">Para adultos acima de 60 anos, a dose por refeição precisa ser maior para superar o limiar anabólico embotado. As mesmas 20-25 g que maximizam SPM em jovens podem ser insuficientes em idosos.</p></div></div></div></div><div class="content-section" id="s_takeaways_art4"><span class="section-anchor"></span><div class="block-takeaways"><div class="block-label">✅ Pontos-Chave</div><h3 class="article-h3">O que levar desta leitura</h3><div class="takeaway-list"><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Alvo total: <strong style='color:#fff'>1,6-2,2 g/kg/dia</strong> — platô em ~1,62 g/kg (Morton 2018, IC amplo).</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Distribua em <strong style='color:#fff'>3-5 refeições de ~0,4 g/kg</strong> cada para maximizar pulsos de SPM.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text"><strong style='color:#fff'>Leucina (~2,5-3 g/refeição)</strong> é o gatilho da SPM via mTORC1.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Efeito <strong style='color:#fff'>'muscle full'</strong>: SPM volta à base em ~2-3h; período refratário ~3-4h.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">O exercício estende a sensibilidade anabólica por <strong style='color:#fff'>12-24h</strong> — timing pós-treino estrito é menos crítico.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text"><strong style='color:#fff'>Caseína pré-sono (~40 g)</strong> eleva a SPM overnight em ~22%.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Idosos precisam de <strong style='color:#fff'>mais proteína por refeição</strong> para superar a resistência anabólica.</span></div></div></div></div>
 <div class="references-section"><div class="references-title">Referências</div><div class="ref-list"><div class="ref-item"><span class="ref-num">1.</span><span>Morton RW, et al. A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults. <em>Br J Sports Med.</em> 2018;52(6):376-384. <a class="ref-link" href="https://doi.org/10.1136/bjsports-2017-097608" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">2.</span><span>Schoenfeld BJ, Aragon AA. How much protein can the body use in a single meal for muscle-building? Implications for daily protein distribution. <em>J Int Soc Sports Nutr.</em> 2018;15:10. <a class="ref-link" href="https://doi.org/10.1186/s12970-018-0215-1" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">3.</span><span>Moore DR, et al. Ingested protein dose response of muscle and albumin protein synthesis after resistance exercise in young men. <em>Am J Clin Nutr.</em> 2009;89(1):161-168. <a class="ref-link" href="https://doi.org/10.3945/ajcn.2008.26401" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">4.</span><span>Res PT, et al. Protein ingestion before sleep improves postexercise overnight recovery. <em>Med Sci Sports Exerc.</em> 2012;44(8):1560-1569. <a class="ref-link" href="https://doi.org/10.1249/mss.0b013e31824cc363" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">5.</span><span>Stokes T, et al. Recent Perspectives Regarding the Role of Dietary Protein for the Promotion of Muscle Hypertrophy with Resistance Exercise Training. <em>Nutrients.</em> 2018;10(2):180. <a class="ref-link" href="https://doi.org/10.3390/nu10020180" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">6.</span><span>Trommelen J, van Loon LJC. Pre-Sleep Protein Ingestion to Improve the Skeletal Muscle Adaptive Response to Exercise Training. <em>Nutrients.</em> 2016;8(12):763. <a class="ref-link" href="https://doi.org/10.3390/nu8120763" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div></div></div>
-<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('art1')" style="cursor:pointer">
           <span class="tag-sm ts-physio">Fisiologia</span>
           <h4>Os 3 Mecanismos da Hipertrofia</h4><p>Por que a tensão mecânica é o driver primário do crescimento muscular.</p>
           <div class="related-meta">14 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art2')" style="cursor:pointer">
           <span class="tag-sm ts-hypert">Hipertrofia</span>
           <h4>Volume de Treino: quantas séries por semana?</h4><p>Dose-resposta entre volume semanal e crescimento muscular.</p>
           <div class="related-meta">14 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art3')" style="cursor:pointer">
           <span class="tag-sm ts-biomech">Biomecânica</span>
           <h4>Amplitude de Movimento e Hipertrofia</h4><p>Treinar no comprimento longo maximiza o crescimento? O papel da titina.</p>
           <div class="related-meta">16 min · Avançado</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art5')" style="cursor:pointer">
           <span class="tag-sm ts-strength">Força</span>
           <h4>Frequência de Treino por Músculo</h4><p>Volume vs frequência — o que realmente importa para a hipertrofia.</p>
           <div class="related-meta">13 min · Avançado</div>
@@ -3499,7 +3499,7 @@ function setLvl(el){
       </div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Pré-requisitos</div>
-      <div class="hsp-prereqs"><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Princípios do treinamento de força</a><a class="prereq-link" href="#" onclick="SP('article');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Volume de treino e hipertrofia</a></div>
+      <div class="hsp-prereqs"><span class="prereq-link is-static"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Princípios do treinamento de força</span><a class="prereq-link" href="#art2" onclick="SP('art2');return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Volume de treino e hipertrofia</a></div>
       <div class="hsp-divider" style="margin:16px 0"></div>
       <div class="hsp-title">Objetivos</div>
       <div class="hsp-objectives"><div class="obj-item"><div class="obj-dot"></div>Entender a relação entre frequência e volume</div><div class="obj-item"><div class="obj-dot"></div>Avaliar criticamente os estudos de frequência</div><div class="obj-item"><div class="obj-dot"></div>Estruturar splits com base em evidências</div></div>
@@ -3550,19 +3550,19 @@ function setLvl(el){
   </div>
 </div></div><div class="content-section" id="s_mistakes_art5"><span class="section-anchor"></span><h2 class="article-h2">Erros comuns</h2><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Tratar a frequência como fim em si</h3><div class="prose"><p style="font-size:14.5px">'Treinar um músculo 3x/semana é melhor' só é verdade se isso permitir completar mais volume com qualidade. Com volume igualado, 3x não supera 2x de forma consistente.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">'Bro-split' com volume excessivo em sessão única</h3><div class="prose"><p style="font-size:14.5px">O problema não é treinar um grupo por dia — é acumular 15-20 séries de um grupo em uma única sessão. Séries finais têm qualidade comprometida, gerando 'junk volume'.</p></div></div></div><div class="block-warning"><div class="warning-icon">⚠️</div><div><div class="block-label">Erro Comum</div><h3 class="article-h3">Comparar frequências sem verificar se o volume foi equalizado</h3><div class="prose"><p style="font-size:14.5px">Grande parte da confusão na literatura vem de estudos que não equalizaram volume. Grupos de maior frequência frequentemente faziam mais trabalho total — e é isso que explica o resultado, não a frequência em si.</p></div></div></div></div><div class="content-section" id="s_takeaways_art5"><span class="section-anchor"></span><div class="block-takeaways"><div class="block-label">✅ Pontos-Chave</div><h3 class="article-h3">O que levar desta leitura</h3><div class="takeaway-list"><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text"><strong style='color:#fff'>Volume total manda</strong>; a frequência é a forma de distribuí-lo com qualidade.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Com volume equalizado, <strong style='color:#fff'>2x/semana > 1x</strong> (Schoenfeld 2016), mas 2x a 6x se equivalem.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text"><strong style='color:#fff'>Colquhoun (2018):</strong> 3 vs 6 dias sem diferença com volume igualado.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Evite <strong style='color:#fff'>mais de ~10-12 séries por grupo por sessão</strong> — rendimento decrescente.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">Volume alto (>16 séries/semana por grupo) → prefira distribuir em <strong style='color:#fff'>mais sessões</strong>.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text">SPM elevada ~24-48h; maior frequência reestimula mais vezes, mas <strong style='color:#fff'>sem mais ganho com volume igual</strong>.</span></div><div class="takeaway-item"><div class="takeaway-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="takeaway-text"><strong style='color:#fff'>Individualize pelo aluno:</strong> aderência e recuperação são decisivas — o melhor split é o que o aluno consegue manter.</span></div></div></div></div>
 <div class="references-section"><div class="references-title">Referências</div><div class="ref-list"><div class="ref-item"><span class="ref-num">1.</span><span>Schoenfeld BJ, Ogborn D, Krieger JW. Effects of Resistance Training Frequency on Measures of Muscle Hypertrophy: A Systematic Review and Meta-Analysis. <em>Sports Med.</em> 2016;46(11):1689-1697. <a class="ref-link" href="https://doi.org/10.1007/s40279-016-0543-8" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">2.</span><span>Ralston GW, et al. The Effect of Weekly Set Volume on Strength Gain: A Meta-Analysis. <em>Sports Med.</em> 2017;47(12):2585-2601. <a class="ref-link" href="https://doi.org/10.1007/s40279-017-0762-7" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">3.</span><span>Colquhoun RJ, et al. Training Volume, Not Frequency, Indicative of Maximal Strength Adaptations to Resistance Training. <em>J Strength Cond Res.</em> 2018;32(5):1207-1213. <a class="ref-link" href="https://doi.org/10.1519/jsc.0000000000002414" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">4.</span><span>Schoenfeld BJ, et al. Resistance Training Volume Enhances Muscle Hypertrophy but Not Strength in Trained Men. <em>Med Sci Sports Exerc.</em> 2019;51(1):94-103. <a class="ref-link" href="https://doi.org/10.1249/mss.0000000000001764" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">5.</span><span>Zaroni RS, et al. High Resistance-Training Frequency Enhances Muscle Thickness in Resistance-Trained Men. <em>J Strength Cond Res.</em> 2019;33(Suppl 1):S140-S151. <a class="ref-link" href="https://doi.org/10.1519/jsc.0000000000002643" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div><div class="ref-item"><span class="ref-num">6.</span><span>Grgic J, et al. Effect of Resistance Training Frequency on Gains in Muscular Strength. <em>Sports Med.</em> 2018;48(5):1207-1220. <a class="ref-link" href="https://doi.org/10.1007/s40279-018-0872-x" target="_blank" rel="noopener noreferrer">Ver estudo &#8599;</a></span></div></div></div>
-<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+<div class="related-section"><div class="related-title">Continue aprendendo</div><div class="related-grid"><div class="related-card" onclick="SP('art1')" style="cursor:pointer">
           <span class="tag-sm ts-physio">Fisiologia</span>
           <h4>Os 3 Mecanismos da Hipertrofia</h4><p>Tensão mecânica, dano e estresse metabólico — qual realmente importa?</p>
           <div class="related-meta">14 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art2')" style="cursor:pointer">
           <span class="tag-sm ts-hypert">Hipertrofia</span>
           <h4>Volume de Treino: quantas séries por semana?</h4><p>A relação dose-resposta entre volume semanal e crescimento muscular.</p>
           <div class="related-meta">14 min · Intermediário</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art3')" style="cursor:pointer">
           <span class="tag-sm ts-biomech">Biomecânica</span>
           <h4>Amplitude de Movimento e Hipertrofia</h4><p>Comprimento muscular longo e o papel da titina na hipertrofia.</p>
           <div class="related-meta">16 min · Avançado</div>
-        </div><div class="related-card" onclick="SP('article')" style="cursor:pointer">
+        </div><div class="related-card" onclick="SP('art4')" style="cursor:pointer">
           <span class="tag-sm ts-nutrition">Nutrição</span>
           <h4>Proteína: quantidade, timing e qualidade</h4><p>1,6-2,2 g/kg/dia — como distribuir para maximizar a síntese proteica.</p>
           <div class="related-meta">15 min · Intermediário</div>

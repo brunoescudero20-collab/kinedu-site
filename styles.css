@@ -1798,8 +1798,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,
 .expand-text strong{color:var(--text)}
 .term-example{background:rgba(243,156,18,.06);border:1px solid rgba(243,156,18,.15);border-radius:8px;padding:16px}
 .term-related{display:flex;flex-wrap:wrap;gap:8px}
-.related-term{font-size:12px;font-weight:600;color:var(--primary);background:rgba(22,58,95,.06);border:1px solid rgba(22,58,95,.12);padding:4px 12px;border-radius:100px;cursor:pointer;transition:background .2s}
-.related-term:hover{background:rgba(22,58,95,.12)}
+/* Termos relacionados são rótulos informativos, não links: nenhum deles
+   navega para lugar nenhum, então não devem se apresentar como clicáveis. */
+.related-term{font-size:12px;font-weight:600;color:var(--primary);background:rgba(22,58,95,.06);border:1px solid rgba(22,58,95,.12);padding:4px 12px;border-radius:100px;cursor:default}
 .term-toggle{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-light);transition:all .2s;flex-shrink:0}
 .term-toggle:hover{border-color:var(--primary);color:var(--primary)}
 .term-toggle svg{width:14px;height:14px;transition:transform .2s}
@@ -3312,3 +3313,22 @@ body{padding-bottom:68px}
 .admin-card-actions-readonly{color:var(--text-muted);font-size:12.5px}
 .admin-review-note{margin-right:12px}
 .admin-rejection-reason{color:#991B1B}
+
+
+/* ─── ELEMENTOS SEM DESTINO (link removido) ───
+   Cards e itens cujo conteúdo referenciado ainda não existe como página.
+   O texto permanece igual; some apenas a afordância de clique (cursor e
+   hover), para não prometer uma navegação que não acontece. */
+.related-card.is-static,
+.bookmark-card.is-static,
+.lesson-item.is-static,
+.rp-item.is-static,
+.rec-item.is-static,
+.prereq-link.is-static { cursor: default; }
+
+.related-card.is-static:hover { box-shadow: none; transform: none; }
+.bookmark-card.is-static:hover { box-shadow: none; border-color: var(--border); }
+.lesson-item.is-static:hover { background: transparent; }
+.rp-item.is-static:hover { border-color: var(--border); background: transparent; }
+.rec-item.is-static:hover { border-color: var(--border); background: transparent; }
+.prereq-link.is-static:hover { color: rgba(255,255,255,.55); }
